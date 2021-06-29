@@ -4,6 +4,7 @@ using HarmonyLib;
 using System;
 using UnhollowerBaseLib;
 using UnityEngine;
+using TMPro;
 
 using P = PlayerTab;
 using PL = Palette;
@@ -270,6 +271,20 @@ namespace BetterColours
             {
                 var p = __instance;
                 p.HatImage.SetColor(colorId);
+            }
+        }
+
+        [HarmonyPatch(typeof(PingTracker), "Update")]
+        private static class CreditPing
+        {
+            private static void Postfix(PingTracker __instance)
+            {
+                __instance.text.alignment = TextAlignmentOptions.Center;
+                if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started)
+                {
+                    var t = __instance.text;
+                    t.text += "\nBetterColours by DevsUs\n";
+                }
             }
         }
     }
