@@ -4,6 +4,7 @@ using HarmonyLib;
 using System;
 using UnhollowerBaseLib;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 using P = PlayerTab;
@@ -24,6 +25,9 @@ namespace BetterColours
 
         public override void Load()
         {
+            SceneManager.add_sceneLoaded((Action<Scene, LoadSceneMode>)((_, __) =>
+            ModManager.Instance.ShowModStamp()));
+
             ACN();
             APC();
             ACS();
@@ -261,10 +265,10 @@ namespace BetterColours
         {
             private static void Postfix(PingTracker __instance)
             {
-                __instance.text.alignment = TextAlignmentOptions.Center;
                 if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started)
                 {
                     var t = __instance.text;
+                    t.alignment = TextAlignmentOptions.Center;
                     t.text += "\nBetterColours by DevsUs\n";
                 }
             }
