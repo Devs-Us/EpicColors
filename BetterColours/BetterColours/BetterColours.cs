@@ -54,24 +54,24 @@ namespace BetterColours
                 S.ColorCoral,
 
                 // New colours goes here
-                (S)999990, // "AcidGreen"
-                (S)999991, // "AquaBlue"
-                (S)999992, // "BloodRed"
-                (S)999993, // "Chocolate"
-                (S)999994, // "Flame"
-                (S)999995, // "Crimson"
-                (S)999996, // "Gold"
-                (S)999997, // "Mint"
-                (S)999998, // "Lavender"
-                (S)999999, // "NightBlue"
-                (S)9999990, // "JungleGreen"
-                (S)9999991, // "LightPink"
-                (S)9999992, // "BlackWhite"
-                (S)9999993, // "Mustard"
-                (S)9999994, // "Blurple"
-                (S)9999995, // "NavyBlue"
-                (S)9999996, // "Teal"
-                (S)9999997, // "Olive"
+                (S)999900, // "AcidGreen"
+                (S)999901, // "AquaBlue"
+                (S)999902, // "BloodRed"
+                (S)999903, // "Chocolate"
+                (S)999904, // "Flame"
+                (S)999905, // "Crimson"
+                (S)999906, // "Gold"
+                (S)999907, // "Mint"
+                (S)999908, // "Lavender"
+                (S)999909, // "NightBlue"
+                (S)999910, // "JungleGreen"
+                (S)999911, // "LightPink"
+                (S)999912, // "BlackWhite"
+                (S)999913, // "Mustard"
+                (S)999914, // "Blurple"
+                (S)999915, // "NavyBlue"
+                (S)999916, // "Teal"
+                (S)999917, // "Olive"
             };
 
         // Add the colors 
@@ -176,42 +176,24 @@ namespace BetterColours
             {
                 var colorString = (int)name switch
                 {
-                    999900 =>
-                    "ACIDGREEN",
-                    999901 =>
-                    "AQUABLUE",
-                    999902 =>
-                    "BLOODRED",
-                    999903 =>
-                    "CHOCOLATE",
-                    999904 =>
-                    "FLAME",
-                    999905 =>
-                    "CRIMSON",
-                    999906 =>
-                    "GOLD",
-                    999907 =>
-                    "MINT",
-                    999908 =>
-                    "LAVENDER",
-                    999909 =>
-                    "NIGHTBLUE",
-                    999910 =>
-                    "JUNGLEGREEN",
-                    999911 =>
-                    "LIGHTPINK",
-                    999912 =>
-                    "PANDA",
-                    999913 =>
-                    "MUSTARD",
-                    999914 =>
-                    "BLURPLE",
-                    999915 =>
-                    "NAVYBLUE",
-                    999916 =>
-                    "TEAL",
-                    999917 =>
-                    "OLIVE",
+                    999900  =>  "ACIDGREEN",
+                    999901  =>  "AQUABLUE",
+                    999902  =>  "BLOODRED",
+                    999903  =>  "CHOCOLATE",
+                    999904  =>  "FLAME",
+                    999905  =>  "CRIMSON",
+                    999906  =>  "GOLD",
+                    999907  =>  "MINT",
+                    999908  =>  "LAVENDER",
+                    999909  =>  "NIGHTBLUE",
+                    999910  =>  "JUNGLEGREEN",
+                    999911  =>  "LIGHTPINK",
+                    999912  =>  "PANDA",
+                    999913  =>  "MUSTARD",
+                    999914  =>  "BLURPLE",
+                    999915  =>  "NAVYBLUE",
+                    999916  =>  "TEAL",
+                    999917  =>  "OLIVE",
 
                     _ =>
                     default // everything else is null
