@@ -26,7 +26,7 @@ Adding more colors into your Among Us game!
 
 ## Installation
 
-1. Ensure that BepInEx and Reactor are installed ([installation guide](INSTALLATION.md)).
+1. Ensure that BepInEx are installed ([installation guide](INSTALLATION.md)).
 2. Download the appropriate mod on the [releases](https://github.com/Devs-Us/BetterColours/releases) page
    for the version of Among Us you are using (more info in below table).
 3. Move the mod to the `(Among Us game files)/BepInEx/plugins` folder.
