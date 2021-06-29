@@ -1,8 +1,9 @@
 # BetterColours
 Adding more colors into your Among Us game!
 
-![preview](https://cdn.discordapp.com/attachments/845322356095320114/859341714161270804/unknown.png)
-## What colors was added?
+<img src="https://cdn.discordapp.com/attachments/845322356095320114/859341714161270804/unknown.png" alt="BetterColours" width="600"/>
+
+## What color was added?
 
   - Acid Green
   - Aqua Blue
