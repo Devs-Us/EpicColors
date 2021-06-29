@@ -14,14 +14,14 @@ Adding more colors into your Among Us game!
   - Gold
   - Mint
   - Lavender
-  - Night Blue
+  - Egyptian Blue
   - Jungle Green
   - Light Pink
   - Panda
   - Mustard
   - Blurple
   - Navy Blue
-  - Teal
+  - Midnight Blue
   - Olive
 
 ## Installation
