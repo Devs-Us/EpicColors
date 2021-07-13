@@ -76,6 +76,8 @@ namespace BetterColours
                 (S)999915, // "NavyBlue"
                 (S)999916, // "Teal"
                 (S)999917, // "Olive"
+                (S)999918, // "Rainbow"
+                (S)999919, // "Seasonal"
             };
 
         // Add the colors 
@@ -103,29 +105,31 @@ namespace BetterColours
                 //* DON'T TOUCH THIS *//
 
                 // New colours goes here
-                new Color32(124, 155, 10, byte.MaxValue),
-                new Color32(2, 90, 143, byte.MaxValue),
-                new Color32(151, 0, 0, byte.MaxValue),
-                new Color32(89, 52, 0, byte.MaxValue),
-                new Color32(236, 109, 0, byte.MaxValue),
-                new Color32(167, 0, 24, byte.MaxValue),
-                new Color32(218, 165, 32, byte.MaxValue),
-                new Color32(168, 255, 195, byte.MaxValue),
-                new Color32(201, 146, 224, byte.MaxValue),
-                new Color32(55, 24, 182, byte.MaxValue),
-                new Color32(43, 78, 39, byte.MaxValue),
-                new Color32(236, 178, 170, byte.MaxValue),
-                new Color32(255, 255, 255, byte.MaxValue),
-                new Color32(198, 193, 5, byte.MaxValue),
-                new Color32(88, 99, 240, byte.MaxValue),
-                new Color32(29, 0, 112, byte.MaxValue),
-                new Color32(0, 128, 128, byte.MaxValue),
-                new Color32(99, 114, 24, byte.MaxValue)
+                new Color32(124, 155, 10, byte.MaxValue),   // "AcidGreen"
+                new Color32(2, 90, 143, byte.MaxValue),     // "AquaBlue"
+                new Color32(151, 0, 0, byte.MaxValue),      // "BloodRed"
+                new Color32(89, 52, 0, byte.MaxValue),      // "Chocolate"
+                new Color32(236, 109, 0, byte.MaxValue),    // "Flame"
+                new Color32(167, 0, 24, byte.MaxValue),     // "Crimson"
+                new Color32(218, 165, 32, byte.MaxValue),   // "Gold"
+                new Color32(168, 255, 195, byte.MaxValue),  // "Mint"
+                new Color32(201, 146, 224, byte.MaxValue),  // "Lavender"
+                new Color32(55, 24, 182, byte.MaxValue),    // "NightBlue"
+                new Color32(43, 78, 39, byte.MaxValue),     // "JungleGreen"
+                new Color32(236, 178, 170, byte.MaxValue),  // "LightPink"
+                new Color32(255, 255, 255, byte.MaxValue),  // "BlackWhite"
+                new Color32(198, 193, 5, byte.MaxValue),    // "Mustard"
+                new Color32(88, 99, 240, byte.MaxValue),    // "Blurple"
+                new Color32(29, 0, 112, byte.MaxValue),     // "NavyBlue"
+                new Color32(0, 128, 128, byte.MaxValue),    // "Teal"
+                new Color32(99, 114, 24, byte.MaxValue),    // "Olive"
+                new Color32(255, 0, 0, byte.MaxValue),      // "Rainbow"
+                new Color32(255, 0, 0, byte.MaxValue),      // "Seasonal"
             };
 
         // Add the shadows
         public static void ACS() => PL.ShadowColors = new[]
-            {
+        {
                 // DON'T TOUCH THIS //
                 new Color32(122, 8, 56, byte.MaxValue),
                 new Color32(9, 21, 142, byte.MaxValue),
@@ -148,24 +152,26 @@ namespace BetterColours
                 // DON'T TOUCH THIS //
 
                 // New colours goes here
-                new Color32(101, 116, 10, byte.MaxValue),
-                new Color32(20, 47, 143, byte.MaxValue),
-                new Color32(70, 0, 0, byte.MaxValue),
-                new Color32(39, 24, 0, byte.MaxValue),
-                new Color32(178, 47, 0, byte.MaxValue),
-                new Color32(86, 8, 24, byte.MaxValue),
-                new Color32(156, 117, 22, byte.MaxValue),
-                new Color32(123, 186, 143, byte.MaxValue),
-                new Color32(156, 113, 173, byte.MaxValue),
-                new Color32(28, 8, 124, byte.MaxValue),
-                new Color32(0, 62, 29, byte.MaxValue),
-                new Color32(255, 101, 174, byte.MaxValue),
-                new Color32(12, 12, 12, byte.MaxValue),
-                new Color32(163, 157, 7, byte.MaxValue),
-                new Color32(71, 81, 200, byte.MaxValue),
-                new Color32(21, 0, 58, byte.MaxValue),
-                new Color32(0, 100, 100, byte.MaxValue),
-                new Color32(66, 91, 15, byte.MaxValue),
+                new Color32(101, 116, 10, byte.MaxValue),   // "AcidGreen"
+                new Color32(20, 47, 143, byte.MaxValue),    // "AquaBlue"
+                new Color32(70, 0, 0, byte.MaxValue),       // "BloodRed"
+                new Color32(39, 24, 0, byte.MaxValue),      // "Chocolate"
+                new Color32(178, 47, 0, byte.MaxValue),     // "Flame"
+                new Color32(86, 8, 24, byte.MaxValue),      // "Crimson"
+                new Color32(156, 117, 22, byte.MaxValue),   // "Gold"
+                new Color32(123, 186, 143, byte.MaxValue),  // "Mint",
+                new Color32(156, 113, 173, byte.MaxValue),  // "Lavender"
+                new Color32(28, 8, 124, byte.MaxValue),     // "NightBlue"
+                new Color32(0, 62, 29, byte.MaxValue),      // "JungleGreen"
+                new Color32(255, 101, 174, byte.MaxValue),  // "LightPink"
+                new Color32(12, 12, 12, byte.MaxValue),     // "BlackWhite"
+                new Color32(163, 157, 7, byte.MaxValue),    // "Mustard"
+                new Color32(71, 81, 200, byte.MaxValue),    // "Blurple"
+                new Color32(21, 0, 58, byte.MaxValue),      // "NavyBlue"
+                new Color32(0, 100, 100, byte.MaxValue),    // "Teal"
+                new Color32(66, 91, 15, byte.MaxValue),     // "Olive"
+                new Color32(255, 0, 0, byte.MaxValue),      // "Rainbow"
+                new Color32(255, 0, 0, byte.MaxValue),      // "Seasonal"
             };
 
         [HarmonyPatch(typeof(TC), "GetString", new[]
@@ -198,6 +204,8 @@ namespace BetterColours
                     999915  =>  "NAVYBLUE",
                     999916  =>  "TEAL",
                     999917  =>  "OLIVE",
+                    999918  =>  "RAINBOW",
+                    999919  =>  "SEASONAL",
 
                     _ =>
                     default // everything else is null
