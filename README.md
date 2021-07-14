@@ -1,9 +1,9 @@
-# BetterColours
+# EpicColors
 Adding more colors into your Among Us game!
 
 <img src="https://cdn.discordapp.com/attachments/845322356095320114/859341714161270804/unknown.png" alt="BetterColours" width="600"/>
 
-## What color was added?
+## Which colors were added?
 
   - Acid Green
   - Aqua Blue
@@ -23,6 +23,17 @@ Adding more colors into your Among Us game!
   - Navy Blue
   - Midnight Blue
   - Olive
+
+## Future Colors!
+
+  - Peach
+  - Lapis Lazuli
+  - Silver
+  - Cadmium Yellow
+  - Brazilwood
+  - Mummybrown
+  - Quercitron
+  - Cochineal
 
 ## Installation
 
