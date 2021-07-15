@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <GamePlatform>Steam</GamePlatform>
+    <GameVersion>2021.6.30s</GameVersion>
+    <GameProvider>Github</GameProvider>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Reactor.MSBuild" Version="*" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="*Patches\mask" />
+  </ItemGroup>
+  
+  <Target Name="Copy" AfterTargets="Build" Condition="'$(AmongUs)' != ''">
+    <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFolder="$(AmongUs)/BepInEx/plugins/" />
+  </Target>
+</Project>
