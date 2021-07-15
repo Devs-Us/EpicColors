@@ -27,8 +27,9 @@ Adding more colors into your Among Us game!
 ## Future Colors!
 
   - Peach
-  - Lapis Lazuli
+  - Teal
   - Silver
+  - Lapis Lazuli
   - Cadmium Yellow
   - Brazilwood
   - Mummybrown
