@@ -5,6 +5,9 @@
     <GamePlatform>Steam</GamePlatform>
     <GameVersion>2021.6.30s</GameVersion>
     <GameProvider>Github</GameProvider>
+
+    <RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>
+		<EnableNETAnalyzers>true</EnableNETAnalyzers>
   </PropertyGroup>
 
   <ItemGroup>
