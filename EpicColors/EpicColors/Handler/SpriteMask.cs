@@ -4,6 +4,8 @@ using System.Reflection;
 using UnhollowerBaseLib;
 using UnityEngine;
 
+using static EpicColors.Logger;
+
 namespace EpicColors {
     public static class SpriteMaskHandler {
         public static Sprite SpriteMask(Assembly assembly = null) {
@@ -18,7 +20,7 @@ namespace EpicColors {
                 LoadImage(myTexture, image, true);
                 return Sprite.Create(myTexture, new Rect(0, 0, myTexture.width, myTexture.height), new Vector2(0.5f, 0.5f), 100f);
             } catch (Exception e) {
-                ColorsPlugin.Logger.LogError(e);
+                ErrorLogger("loading spritemask", e);
              }
             return null;
         }

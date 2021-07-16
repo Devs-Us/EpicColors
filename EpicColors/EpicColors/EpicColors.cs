@@ -7,8 +7,6 @@ using System.Linq;
 using BepInEx.Logging;
 using System.Collections.Generic;
 
-using PL = Palette;
-
 namespace EpicColors
 {
     [BepInPlugin(Id, "EpicColors", Version)]
@@ -25,6 +23,8 @@ namespace EpicColors
         {
             Logger = Log;
 
+            // Because some mods overwrite PL.PlayerColors if
+            // it is loaded after EpicColors
             SceneManager.add_sceneLoaded((System.Action<Scene, LoadSceneMode>)((_, __) => 
             EpicColors.LoadColors()));
             
@@ -33,10 +33,11 @@ namespace EpicColors
     }
 
     // WARNING: THIS BAD CODE MAY HURT YOUR EYES
+    // TODO: Separate special colors from built in array
     public class EpicColors {
-        static bool wasRun = false;
-        public static readonly int OldPaletteCount = Palette.PlayerColors.Length;
-        public static List<string> AllCustomColorList = new List<string>();    
+
+        // Somehow it got called triple times O_O
+        private static bool wasRun = false;
         public static string[] builtInColor = {
             // Static color
             "name;Acid_Green main;124,155,10                                ",
@@ -74,17 +75,8 @@ namespace EpicColors
         public static void LoadColors() {
             if (wasRun) return;
 
-            ColorsPlugin.Logger.LogInfo(OldPaletteCount);
             ModManager.Instance.ShowModStamp();
             CustomColorHandler.CustomColor();
-
-            var combined = builtInColor.ToList();
-            var datalist = CustomColorHandler.CustomColorList;
-            datalist.RemoveAll(x => !x.Contains("name;"));
-            combined.AddRange(datalist);
-
-            foreach (string combine in combined)
-                AllCustomColorList.Add(combine);
 
             foreach (string colorfin in builtInColor)
             {

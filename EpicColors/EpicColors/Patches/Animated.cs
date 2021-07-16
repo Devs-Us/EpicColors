@@ -4,14 +4,17 @@ using System.Collections.Generic;
 using UnhollowerRuntimeLib;
 using UnityEngine;
 
+using static EpicColors.Logger;
+using static EpicColors.CustomColorHandler;
+
 namespace EpicColors
 {
     internal class AnimatedColours
     {
         public static List<(int id, float timer, float duration, Func<float, Color> bodyColour)> ColoursList = new List<(int id, float timer, float duration, Func<float, Color> bodyColour)>
         {
-            ((EpicColors.OldPaletteCount+EpicColors.builtInColor.Length) -2, 0f, 120f, RainbowColour),
-            ((EpicColors.OldPaletteCount+EpicColors.builtInColor.Length) -1, 0f, 130f, SeasonalColour),
+            ((OldPaletteCount+EpicColors.builtInColor.Length) -2, 0f, 120f, RainbowColour),
+            ((OldPaletteCount+EpicColors.builtInColor.Length) -1, 0f, 130f, SeasonalColour),
         };
 
         public class Coroutines : MonoBehaviour
@@ -49,9 +52,11 @@ namespace EpicColors
 
             public void Update()
             {
-                if (!PlayerRender) return;
-                PlayerRender.material.SetColor("_BodyColor", Palette.PlayerColors[ColourId]);
-                PlayerRender.material.SetColor("_BackColor", Palette.ShadowColors[ColourId]);
+                try {
+                    if (!PlayerRender) return;
+                    PlayerRender.material.SetColor("_BodyColor", Palette.PlayerColors[ColourId]);
+                    PlayerRender.material.SetColor("_BackColor", Palette.ShadowColors[ColourId]);
+                } catch{}
             }
         }
 
@@ -62,9 +67,9 @@ namespace EpicColors
 
         public static Color SeasonalColour(float clock)
         {
-            float[] selectPoints = new float[] { 1f / 6f, 1f / 3f, 0.5f, 2f / 3f, 5f / 6f };
-            float[] huePoints = new float[] { 1f / 12f, 1f / 6f, 1f / 3f, 23f / 36f, 5f / 6f };
-            float hue = 0f;
+            var selectPoints = new float[] { 1f / 6f, 1f / 3f, 0.5f, 2f / 3f, 5f / 6f };
+            var huePoints = new float[] { 1f / 12f, 1f / 6f, 1f / 3f, 23f / 36f, 5f / 6f };
+            var hue = 0f;
             for (int i = 0; i < selectPoints.Length; i++)
             {
                 if (clock > selectPoints[i]) hue = huePoints[i];
@@ -77,13 +82,17 @@ namespace EpicColors
         {
             public static void Postfix()
             {
-                var gameObject = GameObject.Find("BetterColours");
-                if (gameObject != null) return;
-                ClassInjector.RegisterTypeInIl2Cpp<Coroutines>();
-                ClassInjector.RegisterTypeInIl2Cpp<AnimatedColour>();
-                var betterColours = new GameObject("BetterColours");
-				GameObject.DontDestroyOnLoad(betterColours);
-				_ = betterColours.AddComponent<Coroutines>();
+                try {
+                    var gameObject = GameObject.Find("EpicColor");
+                    if (gameObject != null) return;
+                    ClassInjector.RegisterTypeInIl2Cpp<Coroutines>();
+                    ClassInjector.RegisterTypeInIl2Cpp<AnimatedColour>();
+                    var EpicColor = new GameObject("EpicColor");
+				    GameObject.DontDestroyOnLoad(EpicColor);
+				    _ = EpicColor.AddComponent<Coroutines>();
+                } catch (Exception e) {
+                    ErrorLogger("registering type", e);
+                }
             }
         }
 

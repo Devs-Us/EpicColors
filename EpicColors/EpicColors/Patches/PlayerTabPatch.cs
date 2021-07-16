@@ -1,5 +1,5 @@
+using System;
 using HarmonyLib;
-using UnhollowerBaseLib;
 using UnityEngine;
 
 using P=PlayerTab;
@@ -10,43 +10,41 @@ namespace EpicColors {
     [HarmonyPatch(typeof(P), nameof(P.OnEnable))]
     internal static class ColorChipPatch {
         public static void Postfix(P __instance) {
-            try {
             var p = __instance;
+            try {
+                foreach (var colorChip in p.ColorChips)
+                    GameObject.Destroy(colorChip.gameObject);
+                p.ColorChips.Clear();
 
-            foreach (var colorChip in p.ColorChips)
-                Object.Destroy(colorChip.gameObject);
-            p.ColorChips.Clear();
+                if (Inner == null || !Inner.scene.IsValid())
+                    p.Scroll();
 
-            if (Inner == null || !Inner.scene.IsValid())
-                p.Scroll();
+                for (var i = 0; i < PL.PlayerColors.Length; i++) {
+                    var _ = -0.935f + (i % 5 * 0.47f);
+                    var __ = 1.55f - (i / 5 * 0.47f);
 
-            for (var i = 0; i < PL.PlayerColors.Length; i++) {
-                var _ = -0.935f + (i % 5 * 0.47f);
-                var __ = 1.65f - (i / 5 * 0.47f);
+                    var cc = GameObject.Instantiate(p.ColorTabPrefab, Inner.transform, true);
+                    cc.Update();
+                    cc.Inner.transform.localScale *= 0.76f;
+                    cc.Inner.transform.localPosition = new Vector3(_, __, -1f);
 
-                var cc = GameObject.Instantiate(p.ColorTabPrefab, Inner.transform, true);
-                cc.Update();
-                cc.Inner.transform.localScale *= 0.76f;
-                cc.Inner.transform.localPosition = new Vector3(_, __, -1f);
+                    var j = i;
+                    cc.Button.OnClick.AddListener((System.Action)delegate
+                    {
+                        p.SelectColor(j);
+                    });
 
-                var j = i;
-                cc.Button.OnClick.AddListener((System.Action)delegate
-                {
-                    p.SelectColor(j);
-                });
+                    cc.Inner.color = PL.PlayerColors[i];
+                    p.ColorChips.Add(cc);
+                }
 
-                cc.Inner.color = PL.PlayerColors[i];
-                p.ColorChips.Add(cc);
-            }
-
-            var row = Mathf.Max((__instance.ColorChips.Count / 5) - 6, 0);
-            var y = (row * 0.55f) + 0.25f;
-            scroll.YBounds = new FloatRange(0f, y);
-            } catch {}
-            }
+                var row = Mathf.Max((__instance.ColorChips.Count / 5) - 7.4f, 0);
+                var y = (row * 0.55f) + 0.25f;
+                scroll.YBounds = new FloatRange(0f, y);
+            }   catch (Exception e) {ColorsPlugin.Logger.LogError(e);}
+        }
 
         private static void Scroll(this PlayerTab __instance) {
-            try {
             Inner = new GameObject { layer = 5, name = "Inner" };
             var scroller = new GameObject { layer = 5, name = "Scroller" };
             scroll = scroller.AddComponent<Scroller>();
@@ -77,7 +75,6 @@ namespace EpicColors {
             collider.enabled = true;
 
             mask.SetActive(true);
-            } catch {}
         }
 
         private static void Update(this ColorChip chip) {
@@ -105,24 +102,17 @@ namespace EpicColors {
     }
 
     [HarmonyPatch(typeof(P), nameof(P.Update))]
-	public static class SelectColorPatch
+	public static class PUpdatePatch
 	{
 		public static void Postfix(PlayerTab __instance)
 		{
-			int i = PlayerControl.LocalPlayer.Data.ColorId;
-			__instance.HatImage.SetColor(i);
-		}
-	}
+			int id = PlayerControl.LocalPlayer.Data.ColorId;
+			__instance.HatImage.SetColor(id);
 
-    [HarmonyPatch(typeof(P), nameof(P.Update))]
-        public class PUpdatePatch
-        {
-            public static void Postfix(PlayerTab __instance)
-            {
-                if (!ConverterHelper.includeBuiltinColor()) return;
+            if (!ConverterHelper.includeBuiltinColor()) return;
                 for (int i = 0; i < AnimatedColours.ColoursList.Count; i++) 
                     __instance.ColorChips[AnimatedColours.ColoursList[i].id].gameObject.GetComponent<SpriteRenderer>().color 
                         = Palette.PlayerColors[AnimatedColours.ColoursList[i].id];
-            }
-        }
+		}
+	}
 }

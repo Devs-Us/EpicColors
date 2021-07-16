@@ -1,11 +1,10 @@
 using HarmonyLib;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using UnityEngine;
+using static EpicColors.ConverterHelper;
+using static EpicColors.CustomColorHandler;
 
 using PL = Palette;
 
@@ -15,28 +14,21 @@ namespace EpicColors
     [HarmonyPatch]
     public static class Watermark {
 
-        public static Tuple<bool,string> ToAuthor(this int colorId) {
-            var ccPath = Path.Combine(Directory.GetCurrentDirectory(), "CustomColor.txt");
-            if (!File.Exists(ccPath)) 
-                return Tuple.Create(false, "");
-
-            foreach (var author in File.ReadLines(ccPath)) {
+        public static string ToAuthor(this int colorId) {
+            foreach (var author in TxtContentList)
                 if (author.StartsWith("author;")) {
-                    var finalauthor = author.Replace("author;","").Replace("_", " ");
-                    return colorId > (ConverterHelper.includeBuiltinColor() ? EpicColors.builtInColor.Count() - 1 : -1) ? 
-                        Tuple.Create(true, finalauthor) : 
-                        Tuple.Create(false, "");
+                    var finalauthor = author.Replace("author;","");
+                    return colorId > (includeBuiltinColor() ? EpicColors.builtInColor.Count() - 1 : -1) ? 
+                        finalauthor : 
+                        "";
                 }
-            }
-            return Tuple.Create(false, "");
+            return "";
         }
 
         public static string GetColorName(this int colorId) {
-            var cclist = CustomColorHandler.CustomColorList;
-            cclist.RemoveAll(x => !x.Contains("name;"));
-
-            var name = cclist[colorId].RealColorName();
-            var color = Palette.PlayerColors[colorId + EpicColors.OldPaletteCount].ToHexString();
+            var name = includeBuiltinColor() ? AllCCList[colorId-OldPaletteCount].RealColorName() 
+            : CustomColorList[colorId-OldPaletteCount].RealColorName();
+            var color = Palette.PlayerColors[colorId].ToHexString();
 
             return $"<color=#{color}>{name}</color>";
         }
@@ -48,25 +40,18 @@ namespace EpicColors
                
                 var t = __instance.text;
                 var pos = __instance.transform.localPosition;
-                var id = PlayerControl.LocalPlayer ? PlayerControl.LocalPlayer.Data.ColorId - EpicColors.OldPaletteCount : -1;
-                var (exists, name) = id.ToAuthor();
-                var builtInlist = EpicColors.AllCustomColorList;
+                var id = PlayerControl.LocalPlayer ? PlayerControl.LocalPlayer.Data.ColorId : -1;
 
-                if (!t.text.Contains("\n")) {
+                if (!t.text.Contains('\n')) {
                     __instance.transform.localPosition = new Vector3(pos.x, 2.8f, pos.z);
                     t.alignment = TMPro.TextAlignmentOptions.TopGeoAligned;
                 }
 
-                t.text += "\nEpicColors by Devs-Us\n";
-
-                if (ConverterHelper.includeBuiltinColor()) {
-                    t.text += PlayerControl.LocalPlayer.Data.ColorId > 17 
-                    ? $"You are using <color=#{Palette.PlayerColors[id + EpicColors.OldPaletteCount].ToHexString()}>{builtInlist[id].RealColorName()}</color>\n" : "";
-                } else {
-                   t.text += PlayerControl.LocalPlayer.Data.ColorId > 17 ? $"You are using {id.GetColorName()}\n" : "";
+                if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) {
+                    t.text += "\nEpicColors by Devs-Us\n";
+                    t.text += id > OldPaletteCount ? $"You are using {id.GetColorName()}\n" : "";
+                    t.text += id.ToAuthor();
                 }
-
-                t.text += exists ? name : "";
             }
         }
     }

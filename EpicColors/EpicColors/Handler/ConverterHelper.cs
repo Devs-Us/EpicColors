@@ -3,13 +3,15 @@ using UnityEngine;
 using System.Text.RegularExpressions;
 using System.Linq;
 using System.IO;
+using static EpicColors.CustomColorHandler;
 
 using PL = Palette;
 
 namespace EpicColors
 {
     public static class ConverterHelper {
-
+        
+        // Apply custom colors to the game
         public static void AddCustomColor(Color32 main, Color32 shadow, StringNames name) {
             var maincolor = PL.PlayerColors.ToList();
             var shadowcolor = PL.ShadowColors.ToList();
@@ -23,13 +25,15 @@ namespace EpicColors
             PL.ShadowColors = shadowcolor.ToArray();
             PL.ColorNames = namecolor.ToArray();
         }
+
+        // Get main and shadow value from string (format)
         public static Tuple<Color32, Color32, bool> ToColorMainShadow(this string data) {
             var empty = new Color32();
             var main = empty;
             var shadow = empty;
 
             if (!data.Contains("main;"))
-                    return Tuple.Create(empty, empty, false);
+                return Tuple.Create(empty, empty, false);
 
             foreach (var colordata in data.Split(" ")) {
                 var s = "shadow;";
@@ -49,36 +53,11 @@ namespace EpicColors
                 Tuple.Create(main, shadow, true);
         }
 
-        private static int SortColors(Color32 a, Color32 b)
-        {
-            if (a.r < b.r)
-                return 1;
-            else if (a.r > b.r)
-                return -1;
-            else 
-            {
-                if (a.g < b.g)
-                    return 1;
-                else if (a.g > b.g)
-                    return -1;
-                else 
-                {
-                    if (a.b < b.b)
-                        return 1;
-                    else if (a.b > b.b)
-                        return -1;
-                }
-            }
-            return 0;
-        }
-
-        public static string ToMainHex(this PlayerControl player) {
-            return Palette.PlayerColors[player.Data.ColorId].ToHexString();
-        }
+        // Get color's name from string
         public static string RealColorName(this string data) {
             var name = "";
             if (!data.Contains("name;"))
-                    return "";
+                    return name;
 
             foreach (var colordata in data.Split(" ")) {
                 name = colordata.StartsWith("name;") 
@@ -87,6 +66,7 @@ namespace EpicColors
             return name;
         }
 
+        // This will convert the name to capitals during scan
         public static Tuple<string, bool> ToColorName(this string data) {
             var name = "";
             if (!data.Contains("name;"))
@@ -99,6 +79,7 @@ namespace EpicColors
             return Tuple.Create(name, true);
         }
 
+        // Convert from string (with format) to Color32
         public static Color32 StringToColor32(this string color) {
 
             // Input need to be "byte,byte,byte"
@@ -115,6 +96,7 @@ namespace EpicColors
                 ColorsPlugin.Logger.LogError($"There's an error while loading the color from strings. STRINGS_NOT_BYTE");
             }
             
+            // Change to byte
             var rgb = Array.ConvertAll(finalstring
                 .Split(',')
                 .Select(c => c)
@@ -125,15 +107,14 @@ namespace EpicColors
                 new Color32(rgb[0], rgb[1], rgb[2], 255);
         }
 
+        // Option for color creator to turn off built in color
         public static bool includeBuiltinColor() {
-            var ccPath = Path.Combine(Directory.GetCurrentDirectory(), "CustomColor.txt");
-            if (!File.Exists(ccPath)) return true;
-
-            var custom = string.Join(" ", File.ReadLines(ccPath));
+            var custom = string.Join(" ", TxtContentList);
             return
                 custom.Contains("removeBuiltIn;") ? false : true;
         }
 
+        // Check if the string is convertable to byte or not
         public static bool IsByteOnly(this string[] value) {
             foreach (string val in value)
                 try {
