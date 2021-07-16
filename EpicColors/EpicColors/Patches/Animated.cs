@@ -9,12 +9,12 @@ using static EpicColors.CustomColorHandler;
 
 namespace EpicColors
 {
-    internal class AnimatedColours
+    internal class AnimatedColors
     {
-        public static List<(int id, float timer, float duration, Func<float, Color> bodyColour)> ColoursList = new List<(int id, float timer, float duration, Func<float, Color> bodyColour)>
-        {
-            ((OldPaletteCount+EpicColors.builtInColor.Length) -2, 0f, 120f, RainbowColour),
-            ((OldPaletteCount+EpicColors.builtInColor.Length) -1, 0f, 130f, SeasonalColour),
+        public static List<(int id, float timer, float duration, Func<float, Color> bodyColor)> ColorsList = new()
+		{
+            ((OldPaletteCount+EpicColors.BuiltInColor.Length) -2, 0f, 120f, RainbowColor),
+            ((OldPaletteCount+EpicColors.BuiltInColor.Length) -1, 0f, 130f, SeasonalColor),
         };
 
         public class Coroutines : MonoBehaviour
@@ -24,48 +24,48 @@ namespace EpicColors
             public void FixedUpdate()
             {
                 try {
-                    for (int i = 0; i < ColoursList.Count; i++)
+                    for (int i = 0; i < ColorsList.Count; i++)
                     {
-                        float newTimer = (ColoursList[i].timer + (1f / ColoursList[i].duration)) % 1f;
-                        ColoursList[i] = (ColoursList[i].id, newTimer, ColoursList[i].duration, ColoursList[i].bodyColour);
-                        Palette.PlayerColors[ColoursList[i].id] = ColoursList[i].bodyColour(ColoursList[i].timer);
-                        Palette.ShadowColors[ColoursList[i].id] = Color32.Lerp(ColoursList[i].bodyColour(ColoursList[i].timer), Color.black, .4f);
+                        float newTimer = (ColorsList[i].timer + (1f / ColorsList[i].duration)) % 1f;
+                        ColorsList[i] = (ColorsList[i].id, newTimer, ColorsList[i].duration, ColorsList[i].bodyColor);
+                        Palette.PlayerColors[ColorsList[i].id] = ColorsList[i].bodyColor(ColorsList[i].timer);
+                        Palette.ShadowColors[ColorsList[i].id] = Color32.Lerp(ColorsList[i].bodyColor(ColorsList[i].timer), Color.black, .4f);
                     }
                 } catch {}
             }
         }
 
-        public class AnimatedColour : MonoBehaviour
+        public class AnimatedColor : MonoBehaviour
         {
-            public int ColourId;
+            public int ColorId;
             public Renderer PlayerRender;
 
-            public AnimatedColour(IntPtr ptr) : base(ptr)
+            public AnimatedColor(IntPtr ptr) : base(ptr)
             {
             }
 
-            public void Initialize(int colourId, Renderer playerRender)
+            public void Initialize(int colorId, Renderer playerRender)
             {
                 PlayerRender = playerRender;
-                ColourId = colourId;
+                ColorId = colorId;
             }
 
             public void Update()
             {
                 try {
                     if (!PlayerRender) return;
-                    PlayerRender.material.SetColor("_BodyColor", Palette.PlayerColors[ColourId]);
-                    PlayerRender.material.SetColor("_BackColor", Palette.ShadowColors[ColourId]);
+                    PlayerRender.material.SetColor("_BodyColor", Palette.PlayerColors[ColorId]);
+                    PlayerRender.material.SetColor("_BackColor", Palette.ShadowColors[ColorId]);
                 } catch{}
             }
         }
 
-        public static Color RainbowColour(float clock)
+        public static Color RainbowColor(float clock)
         {
             return Color.HSVToRGB(clock, 1f, 1f);
         }
 
-        public static Color SeasonalColour(float clock)
+        public static Color SeasonalColor(float clock)
         {
             var selectPoints = new float[] { 1f / 6f, 1f / 3f, 0.5f, 2f / 3f, 5f / 6f };
             var huePoints = new float[] { 1f / 12f, 1f / 6f, 1f / 3f, 23f / 36f, 5f / 6f };
@@ -86,10 +86,10 @@ namespace EpicColors
                     var gameObject = GameObject.Find("EpicColor");
                     if (gameObject != null) return;
                     ClassInjector.RegisterTypeInIl2Cpp<Coroutines>();
-                    ClassInjector.RegisterTypeInIl2Cpp<AnimatedColour>();
-                    var EpicColor = new GameObject("EpicColor");
-				    GameObject.DontDestroyOnLoad(EpicColor);
-				    _ = EpicColor.AddComponent<Coroutines>();
+                    ClassInjector.RegisterTypeInIl2Cpp<AnimatedColor>();
+                    var epicColor = new GameObject("EpicColor");
+				    GameObject.DontDestroyOnLoad(epicColor);
+				    _ = epicColor.AddComponent<Coroutines>();
                 } catch (Exception e) {
                     ErrorLogger("registering type", e);
                 }
@@ -101,14 +101,14 @@ namespace EpicColors
         {
             public static bool Prefix([HarmonyArgument(0)] int colorId, [HarmonyArgument(1)] Renderer rend)
             {
-                var colour = rend.gameObject.GetComponent<AnimatedColour>();
-                if (colour != null && colour.ColourId != colorId) GameObject.Destroy(colour);
-                else if (colour != null) return true;
-                for (int i = 0; i < ColoursList.Count; i++)
+                var color = rend.gameObject.GetComponent<AnimatedColor>();
+                if (color != null && color.ColorId != colorId) GameObject.Destroy(color);
+                else if (color != null) return true;
+                for (int i = 0; i < ColorsList.Count; i++)
                 {
-                    if (ColoursList[i].id != colorId) continue;
-                    colour = rend.gameObject.AddComponent<AnimatedColour>();
-                    colour.Initialize(colorId, rend);
+                    if (ColorsList[i].id != colorId) continue;
+                    color = rend.gameObject.AddComponent<AnimatedColor>();
+                    color.Initialize(colorId, rend);
                     return false;
                 }
                 return true;

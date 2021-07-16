@@ -20,13 +20,13 @@ namespace EpicColors {
                     p.Scroll();
 
                 for (var i = 0; i < PL.PlayerColors.Length; i++) {
-                    var _ = -0.935f + (i % 5 * 0.47f);
-                    var __ = 1.55f - (i / 5 * 0.47f);
+                    var xOffset = -0.935f + (i % 5 * 0.47f);
+                    var yOffset = 1.55f - (i / 5 * 0.47f);
 
                     var cc = GameObject.Instantiate(p.ColorTabPrefab, Inner.transform, true);
                     cc.Update();
                     cc.Inner.transform.localScale *= 0.76f;
-                    cc.Inner.transform.localPosition = new Vector3(_, __, -1f);
+                    cc.Inner.transform.localPosition = new Vector3(xOffset, yOffset, -1f);
 
                     var j = i;
                     cc.Button.OnClick.AddListener((System.Action)delegate
@@ -67,8 +67,8 @@ namespace EpicColors {
             mask.transform.localPosition = new Vector3(0f, 0f, 0f);
             mask.transform.localScale = new Vector3(250f, 380f, 1f);
 
-            var maskspr = mask.AddComponent<SpriteMask>();
-            maskspr.sprite = SpriteMaskHandler.SpriteMask();
+            var spriteMask = mask.AddComponent<SpriteMask>();
+            spriteMask.sprite = SpriteMaskHandler.SpriteMask();
 
             var collider = mask.AddComponent<BoxCollider2D>();
             collider.size = Vector2.one;
@@ -84,17 +84,17 @@ namespace EpicColors {
             var fg = chip.transform.GetChild(0).gameObject;
             var controllerHighlight = chip.transform.GetChild(1).gameObject;
 
-            var shade = fg.transform.GetChild(0).gameObject;
-            var _shade = fg.transform.GetChild(1).gameObject;
+            var oldShade = fg.transform.GetChild(0).gameObject;
+            var newShade = fg.transform.GetChild(1).gameObject;
 
             var highlightRenderer = controllerHighlight.GetComponent<SpriteRenderer>();
             highlightRenderer.maskInteraction = SpriteMaskInteraction.VisibleInsideMask;
 
-            var shadeRenderer = _shade.GetComponent<SpriteRenderer>();
+            var shadeRenderer = newShade.GetComponent<SpriteRenderer>();
             shadeRenderer.maskInteraction = SpriteMaskInteraction.VisibleInsideMask;
             shadeRenderer.color = new Color(0.5f, 0.5f, 0.5f, 0.5f);
             GameObject.Destroy(fg.GetComponent<SpriteMask>());
-            GameObject.Destroy(shade);
+            GameObject.Destroy(oldShade);
         }
 
         private static GameObject Inner = null;
@@ -109,10 +109,10 @@ namespace EpicColors {
 			int id = PlayerControl.LocalPlayer.Data.ColorId;
 			__instance.HatImage.SetColor(id);
 
-            if (!ConverterHelper.includeBuiltinColor()) return;
-                for (int i = 0; i < AnimatedColours.ColoursList.Count; i++) 
-                    __instance.ColorChips[AnimatedColours.ColoursList[i].id].gameObject.GetComponent<SpriteRenderer>().color 
-                        = Palette.PlayerColors[AnimatedColours.ColoursList[i].id];
+            if (!ConverterHelper.IncludeBuiltinColor()) return;
+                for (int i = 0; i < AnimatedColors.ColorsList.Count; i++) 
+                    __instance.ColorChips[AnimatedColors.ColorsList[i].id].gameObject.GetComponent<SpriteRenderer>().color 
+                        = Palette.PlayerColors[AnimatedColors.ColorsList[i].id];
 		}
 	}
 }

@@ -26,15 +26,15 @@ namespace EpicColors {
         }
 
         private static bool LoadImage(Texture2D tex, byte[] data, bool markNonReadable) {
-            if (iCall_LoadImage == null)
-                iCall_LoadImage = IL2CPP.ResolveICall<d_LoadImage>("UnityEngine.ImageConversion::LoadImage");
+            if (ICall_LoadImage == null)
+                ICall_LoadImage = IL2CPP.ResolveICall<d_LoadImage>("UnityEngine.ImageConversion::LoadImage");
 
             var il2cppArray = (Il2CppStructArray<byte>) data;
 
-            return iCall_LoadImage.Invoke(tex.Pointer, il2cppArray.Pointer, markNonReadable);
+            return ICall_LoadImage.Invoke(tex.Pointer, il2cppArray.Pointer, markNonReadable);
         }
 
         internal delegate bool d_LoadImage(IntPtr tex, IntPtr data, bool markNonReadable);
-        internal static d_LoadImage iCall_LoadImage;
+        internal static d_LoadImage ICall_LoadImage;
     }
 }

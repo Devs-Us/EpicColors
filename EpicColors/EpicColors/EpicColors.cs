@@ -37,8 +37,8 @@ namespace EpicColors
     public class EpicColors {
 
         // Somehow it got called triple times O_O
-        private static bool wasRun = false;
-        public static string[] builtInColor = {
+        private static bool WasRun = false;
+        public static string[] BuiltInColor = {
             // Static color
             "name;Acid_Green main;124,155,10                                ",
             "name;Aqua_Blue  main;2,90,143                                  ",
@@ -73,29 +73,29 @@ namespace EpicColors
             };
 
         public static void LoadColors() {
-            if (wasRun) return;
+            if (WasRun) return;
 
             ModManager.Instance.ShowModStamp();
             CustomColorHandler.CustomColor();
 
-            foreach (string colorfin in builtInColor)
+            foreach (string colorfin in BuiltInColor)
             {
-                var (main, shadow, isnotnull) = colorfin.ToColorMainShadow();
-                var (name, istruename) = colorfin.ToColorName();
+                var (main, shadow, isNotNull) = colorfin.ToColorMainShadow();
+                var (name, isTrueName) = colorfin.ToColorName();
                 
-                if (isnotnull && istruename && ConverterHelper.includeBuiltinColor())
+                if (isNotNull && isTrueName && ConverterHelper.IncludeBuiltinColor())
                     ConverterHelper.AddCustomColor(main, shadow, name.NewStringNames());      
             }
 
             foreach (string data in CustomColorHandler.CustomColorList) {
-                var (main, shadow, isnotnull) = data.ToColorMainShadow();
-                var (name, istruename) = data.ToColorName();
+                var (main, shadow, isNotNull) = data.ToColorMainShadow();
+                var (name, isTrueName) = data.ToColorName();
 
-                if (isnotnull && istruename)
+                if (isNotNull && isTrueName)
                     ConverterHelper.AddCustomColor(main, shadow, name.NewStringNames());
             }
 
-            wasRun = true;
+            WasRun = true;
         }
     }
 }
