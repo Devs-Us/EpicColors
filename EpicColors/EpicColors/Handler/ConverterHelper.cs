@@ -13,17 +13,17 @@ namespace EpicColors
         
         // Apply custom colors to the game
         public static void AddCustomColor(Color32 main, Color32 shadow, StringNames name) {
-            var maincolor = PL.PlayerColors.ToList();
-            var shadowcolor = PL.ShadowColors.ToList();
-            var namecolor = PL.ColorNames.ToList();
+            var mainColor = PL.PlayerColors.ToList();
+            var shadowColor = PL.ShadowColors.ToList();
+            var nameColor = PL.ColorNames.ToList();
 
-            maincolor.Add(main);
-            shadowcolor.Add(shadow);
-            namecolor.Add(name);
+            mainColor.Add(main);
+            shadowColor.Add(shadow);
+            nameColor.Add(name);
 
-            PL.PlayerColors = maincolor.ToArray();
-            PL.ShadowColors = shadowcolor.ToArray();
-            PL.ColorNames = namecolor.ToArray();
+            PL.PlayerColors = mainColor.ToArray();
+            PL.ShadowColors = shadowColor.ToArray();
+            PL.ColorNames = nameColor.ToArray();
         }
 
         // Get main and shadow value from string (format)
@@ -35,14 +35,14 @@ namespace EpicColors
             if (!data.Contains("main;"))
                 return Tuple.Create(empty, empty, false);
 
-            foreach (var colordata in data.Split(" ")) {
+            foreach (var colorData in data.Split(" ")) {
                 var s = "shadow;";
 
-                if (colordata.StartsWith("main;"))
-                    main = colordata.StringToColor32();
+                if (colorData.StartsWith("main;"))
+                    main = colorData.StringToColor32();
 
-                if (colordata.StartsWith(s))
-                    shadow = colordata.StringToColor32();
+                if (colorData.StartsWith(s))
+                    shadow = colorData.StringToColor32();
                 else if (!data.Contains(s))
                     shadow = Color32.Lerp(main, Color.black, .4f);
 
@@ -59,9 +59,9 @@ namespace EpicColors
             if (!data.Contains("name;"))
                     return name;
 
-            foreach (var colordata in data.Split(" ")) {
-                name = colordata.StartsWith("name;") 
-                ? colordata.Replace("name;","").Replace("_", " ") : name;
+            foreach (var colorData in data.Split(" ")) {
+                name = colorData.StartsWith("name;") 
+                ? colorData.Replace("name;","").Replace("_", " ") : name;
             }
             return name;
         }
@@ -72,9 +72,9 @@ namespace EpicColors
             if (!data.Contains("name;"))
                     return Tuple.Create("", false);
 
-            foreach (var colordata in data.Split(" ")) {
-                name = colordata.StartsWith("name;") 
-                ? colordata.ToUpper().Replace("NAME;","").Replace("_", "") : name;
+            foreach (var colorData in data.Split(" ")) {
+                name = colorData.StartsWith("name;") 
+                ? colorData.ToUpper().Replace("NAME;","").Replace("_", "") : name;
             }
             return Tuple.Create(name, true);
         }
@@ -83,21 +83,21 @@ namespace EpicColors
         public static Color32 StringToColor32(this string color) {
 
             // Input need to be "byte,byte,byte"
-            string[] excludedword = {"shadow;","main;","name;"};
-            var finalstring = color;
+            string[] excludedWord = {"shadow;","main;","name;"};
+            var finalString = color;
 
-            foreach (string excluded in excludedword)
+            foreach (string excluded in excludedWord)
                 if (color.Contains(excluded))
-                    finalstring = finalstring.Replace(excluded, "");
+                    finalString = finalString.Replace(excluded, "");
 
             // Check if the string only contains 0 - 255 (byte)
-            if (!finalstring.Split(',').IsByteOnly()) {
-                finalstring = "1,1,1";
+            if (!finalString.Split(',').IsByteOnly()) {
+                finalString = "1,1,1";
                 ColorsPlugin.Logger.LogError($"There's an error while loading the color from strings. STRINGS_NOT_BYTE");
             }
             
             // Change to byte
-            var rgb = Array.ConvertAll(finalstring
+            var rgb = Array.ConvertAll(finalString
                 .Split(',')
                 .Select(c => c)
                 .ToArray(), 
@@ -108,7 +108,7 @@ namespace EpicColors
         }
 
         // Option for color creator to turn off built in color
-        public static bool includeBuiltinColor() {
+        public static bool IncludeBuiltinColor() {
             var custom = string.Join(" ", TxtContentList);
             return
                 custom.Contains("removeBuiltIn;") ? false : true;

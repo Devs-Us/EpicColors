@@ -20,23 +20,23 @@ namespace EpicColors
         public static List<string> SpecialColorList = new List<string>();
 
         public static List<(Color32 main, Color32 shadow, StringNames name)> 
-        OldCCList = new List<(Color32 main, Color32 shadow, StringNames name)>();
+        OldCCList = new();
 
         public static void CustomColor() {
             var ccPath = Path.Combine(Directory.GetCurrentDirectory(), "CustomColors.txt");
 
             // Read CustomColors.txt contents and add to list
             if (File.Exists(ccPath))
-                foreach (var datalist in File.ReadLines(ccPath))
-                    TxtContentList.Add(datalist);
+                foreach (var dataList in File.ReadLines(ccPath))
+                    TxtContentList.Add(dataList);
             
             // Filter TxtContentList with "name;" to prevent wrong calculation when using "Count()"
-            var allcc = TxtContentList.ToList();
-            allcc.RemoveAll(x => !x.Contains("name;"));
-            CustomColorList = allcc;
+            var allCC = TxtContentList.ToList();
+            allCC.RemoveAll(x => !x.Contains("name;"));
+            CustomColorList = allCC;
 
             // Append all color list into one
-            AllCCList = EpicColors.builtInColor.ToList();
+            AllCCList = EpicColors.BuiltInColor.ToList();
             foreach (string s in CustomColorList)
                 AllCCList.Add(s);
             foreach (string s in SpecialColorList)

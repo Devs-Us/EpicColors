@@ -17,16 +17,16 @@ namespace EpicColors
         public static string ToAuthor(this int colorId) {
             foreach (var author in TxtContentList)
                 if (author.StartsWith("author;")) {
-                    var finalauthor = author.Replace("author;","");
-                    return colorId > (includeBuiltinColor() ? EpicColors.builtInColor.Count() - 1 : -1) ? 
-                        finalauthor : 
+                    var finalAuthor = author.Replace("author;","");
+                    return colorId > (IncludeBuiltinColor() ? EpicColors.BuiltInColor.Count() - 1 : -1) ? 
+                        finalAuthor : 
                         "";
                 }
             return "";
         }
 
         public static string GetColorName(this int colorId) {
-            var name = includeBuiltinColor() ? AllCCList[colorId-OldPaletteCount].RealColorName() 
+            var name = IncludeBuiltinColor() ? AllCCList[colorId-OldPaletteCount].RealColorName() 
             : CustomColorList[colorId-OldPaletteCount].RealColorName();
             var color = Palette.PlayerColors[colorId].ToHexString();
 
