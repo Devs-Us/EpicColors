@@ -6,6 +6,8 @@
 
 		<Description>BetterColors</Description>
 		<Authors>DevsUs</Authors>
+		<RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>
+		<EnableNETAnalyzers>true</EnableNETAnalyzers>
 	</PropertyGroup>
 
 	<Target Name="Copy" AfterTargets="Build">

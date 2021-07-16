@@ -23,6 +23,8 @@ Adding more colors into your Among Us game!
   - Navy Blue
   - Midnight Blue
   - Olive
+  - Rainbow
+  - Seasonal
 
 ## Future Colors!
 
