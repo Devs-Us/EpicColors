@@ -24,7 +24,7 @@
 <h2 align="center">Adding your own color (Beta)</h2>
 
 EpicColors allows you to configure additional color to the game as simple as creating a txt file!\
-To get started, make sure you have `CustomColor.txt` file inside your Among Us game directory
+To get started, make sure you have `CustomColors.txt` file inside your Among Us game directory
 
 #
 ### Adding colors
@@ -47,7 +47,7 @@ Here's the example with Red:124 Green:155 and Blue:10
     
 - Remove colors that is shipped with EpicColors by using `removeBuiltIn;`
 
-Here's an example of a full content of `CustomColor.txt` file
+Here's an example of a full content of `CustomColors.txt` file
 
     author;Daemon
     removeBuiltIn;
