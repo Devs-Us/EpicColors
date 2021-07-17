@@ -5,17 +5,17 @@
     <GamePlatform>Steam</GamePlatform>
     <GameVersion>2021.6.30s</GameVersion>
     <GameProvider>Github</GameProvider>
+
+    <RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>
+		<EnableNETAnalyzers>true</EnableNETAnalyzers>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Reactor.MSBuild" Version="*" PrivateAssets="all" />
   </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="*Patches\mask" />
-  </ItemGroup>
   
-  <Target Name="Copy" AfterTargets="Build" Condition="'$(AmongUs)' != ''">
-    <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFolder="$(AmongUs)/BepInEx/plugins/" />
+  <Target Name="Copy" AfterTargets="Build">
+    <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFolder="$(AmongUs)/BepInEx/plugins/" Condition="'$(AmongUs)' != ''"/>
+    <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFiles="../Build/$(AssemblyName).dll" />
   </Target>
 </Project>

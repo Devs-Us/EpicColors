@@ -2,12 +2,12 @@
 using BepInEx.IL2CPP;
 using HarmonyLib;
 using System;
+using UnityEngine;
 using UnityEngine.SceneManagement;
-using System.Linq;
 using BepInEx.Logging;
-using System.Collections.Generic;
 
-using PL = Palette;
+using static EpicColors.CustomColorHandler;
+using static EpicColors.ConverterHelper;
 
 namespace EpicColors
 {
@@ -25,6 +25,8 @@ namespace EpicColors
         {
             Logger = Log;
 
+            // Because some mods overwrite PL.PlayerColors if
+            // it is loaded after EpicColors
             SceneManager.add_sceneLoaded((System.Action<Scene, LoadSceneMode>)((_, __) => 
             EpicColors.LoadColors()));
             
@@ -33,11 +35,12 @@ namespace EpicColors
     }
 
     // WARNING: THIS BAD CODE MAY HURT YOUR EYES
+    // TODO: Separate special colors from built in array
     public class EpicColors {
-        static bool wasRun = false;
-        public static readonly int OldPaletteCount = Palette.PlayerColors.Length;
-        public static List<string> AllCustomColorList = new List<string>();    
-        public static string[] builtInColor = {
+
+        // Somehow it got called triple times O_O
+        private static bool WasRun = false;
+        public static string[] BuiltInColor = {
             // Static color
             "name;Acid_Green main;124,155,10                                ",
             "name;Aqua_Blue  main;2,90,143                                  ",
@@ -72,38 +75,21 @@ namespace EpicColors
             };
 
         public static void LoadColors() {
-            if (wasRun) return;
+            if (WasRun) return;
+            WasRun = true;
 
-            ColorsPlugin.Logger.LogInfo(OldPaletteCount);
             ModManager.Instance.ShowModStamp();
             CustomColorHandler.CustomColor();
 
-            var combined = builtInColor.ToList();
-            var datalist = CustomColorHandler.CustomColorList;
-            datalist.RemoveAll(x => !x.Contains("name;"));
-            combined.AddRange(datalist);
+            foreach (string data in AllCCList) {
+                ColorsPlugin.Logger.LogInfo(data);
+                var (main, shadow) = data.ToColorMainShadow();
+                var name = data.ToColorName();
 
-            foreach (string combine in combined)
-                AllCustomColorList.Add(combine);
-
-            foreach (string colorfin in builtInColor)
-            {
-                var (main, shadow, isnotnull) = colorfin.ToColorMainShadow();
-                var (name, istruename) = colorfin.ToColorName();
-                
-                if (isnotnull && istruename && ConverterHelper.includeBuiltinColor())
-                    ConverterHelper.AddCustomColor(main, shadow, name.NewStringNames());      
+                if (!main.Equals(new Color32()) && name != "") 
+                    if (data.Contains("custom;") || (!data.Contains("custom;") && IncludeBuiltinColor()))
+                        ConverterHelper.AddCustomColor(main, shadow, name.NewStringNames());
             }
-
-            foreach (string data in CustomColorHandler.CustomColorList) {
-                var (main, shadow, isnotnull) = data.ToColorMainShadow();
-                var (name, istruename) = data.ToColorName();
-
-                if (isnotnull && istruename)
-                    ConverterHelper.AddCustomColor(main, shadow, name.NewStringNames());
-            }
-
-            wasRun = true;
         }
     }
 }
