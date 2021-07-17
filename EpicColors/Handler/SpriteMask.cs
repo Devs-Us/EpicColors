@@ -10,22 +10,17 @@ namespace EpicColors {
     public static class SpriteMaskHandler {
         public static Sprite SpriteMask(Assembly assembly = null) {
             try {
-                Assembly myAssembly = null;
-                myAssembly = assembly == null ? Assembly.GetCallingAssembly() : assembly;
-                Stream myStream = Assembly.Load(myAssembly.GetName()).GetManifestResourceStream("EpicColors.Patches.mask");
-
-                byte[] image = new byte[myStream.Length];
-                myStream.Read(image, 0, (int) myStream.Length);
-                Texture2D myTexture = new Texture2D(2, 2, TextureFormat.ARGB32, true);
-                LoadImage(myTexture, image, true);
-                return Sprite.Create(myTexture, new Rect(0, 0, myTexture.width, myTexture.height), new Vector2(0.5f, 0.5f), 100f);
+                var imageBytes = Convert.FromBase64String(ok);
+                Texture2D tex = new Texture2D(2, 2);
+                tex.LoadImage(imageBytes, true);
+                return Sprite.Create(tex, new Rect(0.0f, 0.0f, tex.width, tex.height), new Vector2(0.5f, 0.5f), 100.0f);
             } catch (Exception e) {
                 ErrorLogger("loading spritemask", e);
              }
             return null;
         }
 
-        private static bool LoadImage(Texture2D tex, byte[] data, bool markNonReadable) {
+        public static bool LoadImage(this Texture2D tex, byte[] data, bool markNonReadable) {
             if (ICall_LoadImage == null)
                 ICall_LoadImage = IL2CPP.ResolveICall<d_LoadImage>("UnityEngine.ImageConversion::LoadImage");
 
@@ -36,5 +31,8 @@ namespace EpicColors {
 
         internal delegate bool d_LoadImage(IntPtr tex, IntPtr data, bool markNonReadable);
         internal static d_LoadImage ICall_LoadImage;
+
+        internal static string ok = 
+        @"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAMSURBVBhXY/j//z8ABf4C/qc1gYQAAAAASUVORK5CYII=";
     }
 }

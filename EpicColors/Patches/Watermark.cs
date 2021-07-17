@@ -10,8 +10,8 @@ using PL = Palette;
 
 namespace EpicColors
 {
-    [HarmonyPriority(Priority.Last)]
     [HarmonyPatch]
+    [HarmonyPriority(Priority.Last)]
     public static class Watermark {
 
         public static string ToAuthor(this int colorId) {
