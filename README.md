@@ -58,7 +58,7 @@ and TADAA!
 <p align="left"><img src="https://user-images.githubusercontent.com/82711525/126036324-7363d5a9-6893-44b1-8df2-9f86dd746e9d.png" alt="PlayerTab" width="400" />
 <img src="https://user-images.githubusercontent.com/82711525/126036369-477859f2-c03a-41ed-b975-353577f45e2c.png" width="400" /></p>
 
-If you add the parameter `removeBuiltIn;`, the built in colors that is shipped with our mod wil get excluded! Here's the preview:
+If you add the parameter `removeBuiltIn;`, the built in colors that is shipped with our mod will get excluded! Here's the preview:
 
 <p align="left"><img src="https://user-images.githubusercontent.com/82711525/126036454-915ef977-3be8-48b0-a279-2aca9e85ac04.png" alt="PlayerTab" width="400" />
 
