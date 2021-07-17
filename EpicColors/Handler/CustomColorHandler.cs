@@ -12,9 +12,6 @@ namespace EpicColors
         public static List<string> CustomColorList = new List<string>();
         public static List<string> SpecialColorList = new List<string>();
 
-        public static List<(Color32 main, Color32 shadow, StringNames name)> 
-        OldCCList = new List<(Color32 main, Color32 shadow, StringNames name)>();
-
         public static void CustomColor() {
             var ccPath = Path.Combine(Directory.GetCurrentDirectory(), "CustomColors.txt");
 
@@ -34,13 +31,33 @@ namespace EpicColors
                 AllCCList.Add(s + " custom;");
         }
 
-        internal class AnimatedColor
-        {
-            public static List<(Color32 main, StringNames name, string real)> ColorList = 
-            new List<(Color32 main, StringNames name, string real)>
-            {
-                
-            };
+        // Option for color creator to turn off built in color
+        public static bool IncludeBuiltinColor() {
+            var custom = string.Join(" ", TxtContentList);
+            return
+                custom.Contains("removeBuiltIn;") ? false : true;
         }
+
+        // I want this to declare whether the player is using a custom color or not
+        // and are they using built in one or they own.
+        public static bool IsUsingCustomColor(int id, out bool CustomColor) {
+            CustomColor = id >= OldPaletteCount + EpicColors.BuiltInColor.Count();
+            return id > OldPaletteCount;
+        }
+
+        // Check if the string is convertable to byte or not
+        public static bool IsByteOnly(this string[] value) {
+            foreach (string val in value)
+                try {
+                    byte.Parse(val); 
+                    return true;
+                }
+                catch (System.Exception e) {
+                    Logger.ErrorLogger("converting string to byte", e);
+                }
+
+            return false;
+        }
+
     }
 }

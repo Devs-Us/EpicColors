@@ -2,6 +2,7 @@ using System;
 using HarmonyLib;
 using UnityEngine;
 using static EpicColors.SpriteMaskHandler;
+using static EpicColors.CustomColorHandler;
 
 using P=PlayerTab;
 using PL=Palette;
@@ -108,7 +109,7 @@ namespace EpicColors {
 			int id = PlayerControl.LocalPlayer.Data.ColorId;
 			__instance.HatImage.SetColor(id);
 
-            if (!ConverterHelper.IncludeBuiltinColor()) return;
+            if (!IncludeBuiltinColor()) return;
                 for (int i = 0; i < AnimatedColors.ColorsList.Count; i++) 
                     __instance.ColorChips[AnimatedColors.ColorsList[i].id].gameObject.GetComponent<SpriteRenderer>().color 
                         = Palette.PlayerColors[AnimatedColors.ColorsList[i].id];

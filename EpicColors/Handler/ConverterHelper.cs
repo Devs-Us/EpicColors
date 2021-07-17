@@ -104,28 +104,7 @@ namespace EpicColors
             return
                 new Color32(rgb[0], rgb[1], rgb[2], 255);
         }
-
-        // Option for color creator to turn off built in color
-        public static bool IncludeBuiltinColor() {
-            var custom = string.Join(" ", TxtContentList);
-            return
-                custom.Contains("removeBuiltIn;") ? false : true;
-        }
-
-        // Check if the string is convertable to byte or not
-        public static bool IsByteOnly(this string[] value) {
-            foreach (string val in value)
-                try {
-                    byte.Parse(val); 
-                    return true;
-                }
-                catch (Exception e) {
-                    ColorsPlugin.Logger.LogError($"Unable to convert to byte: {e}");
-                }
-
-            return false;
-        }
-
+        
         public static string ToHexString(this Color32 c) {
 		return string.Format ("{0:X2}{1:X2}{2:X2}", c.r, c.g, c.b);
 	    }
