@@ -26,7 +26,7 @@ namespace EpicColors
                 }
 
                 if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) {
-                    t.text += "\nEpicColors by Devs-Us\n";
+                    t.text += "\nEpicColors by Devs-Us <size=80%>v1.0.0</size>\n";
                     try {
                         t.text += id.GetColorName();
                         t.text += id.ToAuthor();

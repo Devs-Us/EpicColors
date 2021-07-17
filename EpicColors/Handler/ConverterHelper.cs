@@ -41,7 +41,7 @@ namespace EpicColors
 
                 if (data.StartsWith(s))
                     shadow = data.StringToColor32();
-                else if (!data.Contains(s))
+                else if (!value.Contains(s))
                     shadow = Color32.Lerp(main, Color.black, .4f);
 
                 ColorsPlugin.Logger.LogDebug(main.ToString() + shadow.ToString());
@@ -104,7 +104,7 @@ namespace EpicColors
             return
                 new Color32(rgb[0], rgb[1], rgb[2], 255);
         }
-        
+
         public static string ToHexString(this Color32 c) {
 		return string.Format ("{0:X2}{1:X2}{2:X2}", c.r, c.g, c.b);
 	    }
