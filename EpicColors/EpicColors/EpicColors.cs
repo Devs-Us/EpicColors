@@ -2,10 +2,12 @@
 using BepInEx.IL2CPP;
 using HarmonyLib;
 using System;
+using UnityEngine;
 using UnityEngine.SceneManagement;
-using System.Linq;
 using BepInEx.Logging;
-using System.Collections.Generic;
+
+using static EpicColors.CustomColorHandler;
+using static EpicColors.ConverterHelper;
 
 namespace EpicColors
 {
@@ -74,28 +76,20 @@ namespace EpicColors
 
         public static void LoadColors() {
             if (WasRun) return;
+            WasRun = true;
 
             ModManager.Instance.ShowModStamp();
             CustomColorHandler.CustomColor();
 
-            foreach (string colorfin in BuiltInColor)
-            {
-                var (main, shadow, isNotNull) = colorfin.ToColorMainShadow();
-                var (name, isTrueName) = colorfin.ToColorName();
-                
-                if (isNotNull && isTrueName && ConverterHelper.IncludeBuiltinColor())
-                    ConverterHelper.AddCustomColor(main, shadow, name.NewStringNames());      
+            foreach (string data in AllCCList) {
+                ColorsPlugin.Logger.LogInfo(data);
+                var (main, shadow) = data.ToColorMainShadow();
+                var name = data.ToColorName();
+
+                if (!main.Equals(new Color32()) && name != "") 
+                    if (data.Contains("custom;") || (!data.Contains("custom;") && IncludeBuiltinColor()))
+                        ConverterHelper.AddCustomColor(main, shadow, name.NewStringNames());
             }
-
-            foreach (string data in CustomColorHandler.CustomColorList) {
-                var (main, shadow, isNotNull) = data.ToColorMainShadow();
-                var (name, isTrueName) = data.ToColorName();
-
-                if (isNotNull && isTrueName)
-                    ConverterHelper.AddCustomColor(main, shadow, name.NewStringNames());
-            }
-
-            WasRun = true;
         }
     }
 }

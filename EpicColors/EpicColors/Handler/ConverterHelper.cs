@@ -1,8 +1,6 @@
 using System;
 using UnityEngine;
-using System.Text.RegularExpressions;
 using System.Linq;
-using System.IO;
 using static EpicColors.CustomColorHandler;
 
 using PL = Palette;
@@ -13,36 +11,36 @@ namespace EpicColors
         
         // Apply custom colors to the game
         public static void AddCustomColor(Color32 main, Color32 shadow, StringNames name) {
-            var mainColor = PL.PlayerColors.ToList();
-            var shadowColor = PL.ShadowColors.ToList();
-            var nameColor = PL.ColorNames.ToList();
+            var maincolor = PL.PlayerColors.ToList();
+            var shadowcolor = PL.ShadowColors.ToList();
+            var namecolor = PL.ColorNames.ToList();
 
-            mainColor.Add(main);
-            shadowColor.Add(shadow);
-            nameColor.Add(name);
+            maincolor.Add(main);
+            shadowcolor.Add(shadow);
+            namecolor.Add(name);
 
-            PL.PlayerColors = mainColor.ToArray();
-            PL.ShadowColors = shadowColor.ToArray();
-            PL.ColorNames = nameColor.ToArray();
+            PL.PlayerColors = maincolor.ToArray();
+            PL.ShadowColors = shadowcolor.ToArray();
+            PL.ColorNames = namecolor.ToArray();
         }
 
         // Get main and shadow value from string (format)
-        public static Tuple<Color32, Color32, bool> ToColorMainShadow(this string data) {
+        public static Tuple<Color32, Color32> ToColorMainShadow(this string value) {
             var empty = new Color32();
             var main = empty;
             var shadow = empty;
 
-            if (!data.Contains("main;"))
-                return Tuple.Create(empty, empty, false);
+            if (!value.Contains("main;"))
+                return Tuple.Create(empty, empty);
 
-            foreach (var colorData in data.Split(" ")) {
+            foreach (var data in value.Split(" ")) {
                 var s = "shadow;";
 
-                if (colorData.StartsWith("main;"))
-                    main = colorData.StringToColor32();
+                if (data.StartsWith("main;"))
+                    main = data.StringToColor32();
 
-                if (colorData.StartsWith(s))
-                    shadow = colorData.StringToColor32();
+                if (data.StartsWith(s))
+                    shadow = data.StringToColor32();
                 else if (!data.Contains(s))
                     shadow = Color32.Lerp(main, Color.black, .4f);
 
@@ -50,43 +48,43 @@ namespace EpicColors
             }
 
             return 
-                Tuple.Create(main, shadow, true);
+                Tuple.Create(main, shadow);
         }
 
         // Get color's name from string
-        public static string RealColorName(this string data) {
+        public static string RealColorName(this string value) {
             var name = "";
-            if (!data.Contains("name;"))
+            if (!value.Contains("name;"))
                     return name;
 
-            foreach (var colorData in data.Split(" ")) {
-                name = colorData.StartsWith("name;") 
-                ? colorData.Replace("name;","").Replace("_", " ") : name;
+            foreach (var data in value.Split(" ")) {
+                name = data.StartsWith("name;") 
+                ? data.Replace("name;","").Replace("_", " ") : name;
             }
             return name;
         }
 
         // This will convert the name to capitals during scan
-        public static Tuple<string, bool> ToColorName(this string data) {
+        public static string ToColorName(this string value) {
             var name = "";
-            if (!data.Contains("name;"))
-                    return Tuple.Create("", false);
+            if (!value.Contains("name;"))
+                    return "";
 
-            foreach (var colorData in data.Split(" ")) {
-                name = colorData.StartsWith("name;") 
-                ? colorData.ToUpper().Replace("NAME;","").Replace("_", "") : name;
+            foreach (var data in value.Split(" ")) {
+                name = data.StartsWith("name;") 
+                ? data.ToUpper().Replace("NAME;","").Replace("_", "") : name;
             }
-            return Tuple.Create(name, true);
+            return name;
         }
 
         // Convert from string (with format) to Color32
         public static Color32 StringToColor32(this string color) {
 
             // Input need to be "byte,byte,byte"
-            string[] excludedWord = {"shadow;","main;","name;"};
+            string[] excludedword = {"shadow;","main;","name;"};
             var finalString = color;
 
-            foreach (string excluded in excludedWord)
+            foreach (string excluded in excludedword)
                 if (color.Contains(excluded))
                     finalString = finalString.Replace(excluded, "");
 
