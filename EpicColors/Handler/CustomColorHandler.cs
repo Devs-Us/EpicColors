@@ -38,11 +38,10 @@ namespace EpicColors
                 custom.Contains("removeBuiltIn;") ? false : true;
         }
 
-        // I want this to declare whether the player is using a custom color or not
-        // and are they using built in one or they own.
+        // Check if the player is using custom color or not.
         public static bool IsUsingCustomColor(int id, out bool CustomColor) {
-            CustomColor = id >= OldPaletteCount + EpicColors.BuiltInColor.Count();
-            return id > OldPaletteCount;
+            CustomColor = id >= OldPaletteCount + (IncludeBuiltinColor() ? EpicColors.BuiltInColor.Count() : 0);
+            return id >= OldPaletteCount;
         }
 
         // Check if the string is convertable to byte or not

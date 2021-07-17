@@ -26,7 +26,7 @@ namespace EpicColors
                 }
 
                 if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) {
-                    t.text += "\nEpicColors by Devs-Us <size=80%>v1.0.0</size>\n";
+                    t.text += "\nEpicColors by Devs-Us <size=80%>v1.0.1</size>\n";
                     try {
                         t.text += id.GetColorName();
                         t.text += id.ToAuthor();
@@ -38,7 +38,8 @@ namespace EpicColors
         public static string ToAuthor(this int colorId) {
             var name = "";
             foreach (var author in TxtContentList)
-                if (author.StartsWith("author;") && IsUsingCustomColor(colorId, out bool customColor) && customColor) {
+                if (author.StartsWith("author;") && 
+                IsUsingCustomColor(colorId, out bool customColor) && customColor) {
                     var finalAuthor = author.Replace("author;","");
                     name += finalAuthor + "\n";
                 }
@@ -50,7 +51,7 @@ namespace EpicColors
             : CustomColorList[colorId-OldPaletteCount].RealColorName();
             var color = Palette.PlayerColors[colorId].ToHexString();
 
-            return IsUsingCustomColor(colorId+1, out var nth) 
+            return IsUsingCustomColor(colorId+1, out _) 
             ? $"You are using <color=#{color}>{name}</color>\n" : "";
         }
     }
