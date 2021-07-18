@@ -40,14 +40,12 @@ namespace EpicColors.Patches.ColorTypes
 					{
 						setShadow = true;
 						ShadowColor = ParseColor(colorField[1], ShadowColor);
-						Debug.logger.Log(ShadowColor.ToString());
 						break;
 					}
 				}
 			}
 			if (!setMain) BodyColor = (1f, 1f);
 			if (!setShadow) ShadowColor = (BodyColor.saturation, BodyColor.value * 0.6f);
-			Debug.logger.Log(ShadowColor.ToString());
 		}
 
 		public override Color GetBodyColor()
@@ -63,9 +61,6 @@ namespace EpicColors.Patches.ColorTypes
 		private static (float saturation, float value) ParseColor(string field, (float saturation, float value) defaultValue)
 		{
 			string[] colorHSV = field.Split(',');
-			Debug.logger.Log(colorHSV.Length.ToString());
-			Debug.logger.Log(tryParseHundred(colorHSV[0], out byte saturation2).ToString());
-			Debug.logger.Log(tryParseHundred(colorHSV[1], out byte value2).ToString());
 
 			if (colorHSV.Length != 2 || tryParseHundred(colorHSV[0], out byte saturation) || tryParseHundred(colorHSV[1], out byte value)) return defaultValue;
 			return ((float)saturation / 100, (float)value / 100);

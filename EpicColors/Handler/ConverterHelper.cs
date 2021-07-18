@@ -90,7 +90,7 @@ namespace EpicColors
                     finalString = finalString.Replace(excluded, "");
 
             // Check if the string only contains 0 - 255 (byte)
-            if (!finalString.Split(',').IsByteOnly()) {
+            if (!IsByteOnly(finalString.Split(','))) {
                 finalString = "1,1,1";
                 ColorsPlugin.Logger.LogError($"There's an error while loading the color from strings. STRINGS_NOT_BYTE");
             }

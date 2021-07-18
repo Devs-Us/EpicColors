@@ -41,7 +41,7 @@ namespace EpicColors
     public class EpicColors {
 
         // Somehow it got called triple times O_O
-        private static bool wasRun = false;
+        private static bool WasRun = false;
         public static string[] defaultConfig = {
             // Document details
             "author;",
@@ -106,7 +106,7 @@ namespace EpicColors
             ConverterHelper.ClearPalette();
             foreach (Patches.ColorTypes.BaseColor data in CustomColorHandler.AllColors) ConverterHelper.AddCustomColor(data.GetBodyColor(), data.GetShadowColor(), data.Name.NewStringNames());
 
-            wasRun = true;
+            WasRun = true;
         }
     }
 }
