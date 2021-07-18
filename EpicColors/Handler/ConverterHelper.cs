@@ -4,11 +4,20 @@ using System.Linq;
 using static EpicColors.CustomColorHandler;
 
 using PL = Palette;
+using System.Collections.Generic;
 
 namespace EpicColors
 {
     public static class ConverterHelper {
         
+        public static void ClearPalette()
+		{
+            int colorCount = AllColors.Count;
+            PL.PlayerColors = Array.Empty<Color32>();
+            PL.ShadowColors = Array.Empty<Color32>();
+            PL.ColorNames = Array.Empty<StringNames>();
+        }
+
         // Apply custom colors to the game
         public static void AddCustomColor(Color32 main, Color32 shadow, StringNames name) {
             var maincolor = PL.PlayerColors.ToList();
@@ -52,16 +61,8 @@ namespace EpicColors
         }
 
         // Get color's name from string
-        public static string RealColorName(this string value) {
-            var name = "";
-            if (!value.Contains("name;"))
-                    return name;
-
-            foreach (var data in value.Split(" ")) {
-                name = data.StartsWith("name;") 
-                ? data.Replace("name;","").Replace("_", " ") : name;
-            }
-            return name;
+        public static string RealColorName(this string data) {
+            return data.Replace("_", " ");
         }
 
         // This will convert the name to capitals during scan
@@ -89,7 +90,7 @@ namespace EpicColors
                     finalString = finalString.Replace(excluded, "");
 
             // Check if the string only contains 0 - 255 (byte)
-            if (!finalString.Split(',').IsByteOnly()) {
+            if (!IsByteOnly(finalString.Split(','))) {
                 finalString = "1,1,1";
                 ColorsPlugin.Logger.LogError($"There's an error while loading the color from strings. STRINGS_NOT_BYTE");
             }
@@ -103,6 +104,20 @@ namespace EpicColors
 
             return
                 new Color32(rgb[0], rgb[1], rgb[2], 255);
+        }
+
+        // Check if the string is convertable to byte or not
+        public static bool IsByteOnly(this string[] value) {
+            foreach (string val in value)
+                try {
+                    byte.Parse(val); 
+                    return true;
+                }
+                catch (Exception e) {
+                    ColorsPlugin.Logger.LogError($"Unable to convert to byte: {e}");
+                }
+
+            return false;
         }
 
         public static string ToHexString(this Color32 c) {
