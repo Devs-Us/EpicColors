@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using HarmonyLib;
+using static EpicColors.CustomColorHandler;
 
 using EpicColors.Patches.ColorTypes;
 using UnhollowerRuntimeLib;
@@ -37,14 +38,16 @@ namespace EpicColors.Handler
         public void Update()
         {
             List<BaseColor> colorList = CustomColorHandler.AllColors;
-            for (int i = 0; i < colorList.Count; i++)
-            {
-                if (!colorList[i].IsSpecial) continue;
-				Type type = colorList.GetType();
-                colorList[i].Timer = ((Time.deltaTime / colorList[i].Duration) + colorList[i].Timer) % 1f;
-                Palette.PlayerColors[i] = colorList[i].GetBodyColor();
-                Palette.ShadowColors[i] = colorList[i].GetShadowColor();
-            }
+            try {
+                for (int i = 0; i < colorList.Count + (RemoveVanillaColors(out var oldColor) ? 0 : oldColor); i++)
+                {
+                    if (!colorList[i].IsSpecial) continue;
+			    	Type type = colorList.GetType();
+                    colorList[i].Timer = ((Time.deltaTime / colorList[i].Duration) + colorList[i].Timer) % 1f;
+                    Palette.PlayerColors[i + (RemoveVanillaColors(out _) ? 0 : oldColor)] = colorList[i].GetBodyColor();
+                    Palette.ShadowColors[i + (RemoveVanillaColors(out _) ? 0 : oldColor)] = colorList[i].GetShadowColor();
+                }
+            } catch {}
         }
     }
 }

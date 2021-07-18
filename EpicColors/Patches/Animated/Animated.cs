@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnhollowerRuntimeLib;
 using UnityEngine;
+using static EpicColors.CustomColorHandler;
 
 namespace EpicColors.Patches.Animated
 {
@@ -14,8 +15,10 @@ namespace EpicColors.Patches.Animated
         {
             public static bool Prefix([HarmonyArgument(0)] int colorId, [HarmonyArgument(1)] Renderer rend)
             {
+                colorId -= RemoveVanillaColors(out var oldColor) ? 0 : oldColor;
                 AnimatedColors colorComponent = rend.gameObject.GetComponent<AnimatedColors>();
-                if (colorComponent != null && colorComponent.ColorId != colorId) UnityEngine.Object.Destroy(colorComponent);
+                if (colorComponent != null && colorComponent.ColorId != colorId) 
+                    UnityEngine.Object.Destroy(colorComponent);
                 else if (colorComponent != null) return true;
                 for (int i = 0; i < CustomColorHandler.AllColors.Count; i++)
                 {
