@@ -6,11 +6,20 @@ using System.IO;
 using static EpicColors.CustomColorHandler;
 
 using PL = Palette;
+using System.Collections.Generic;
 
 namespace EpicColors
 {
     public static class ConverterHelper {
         
+        public static void ClearPalette()
+		{
+            int colorCount = AllColors.Count;
+            PL.PlayerColors = Array.Empty<Color32>();
+            PL.ShadowColors = Array.Empty<Color32>();
+            PL.ColorNames = Array.Empty<StringNames>();
+        }
+
         // Apply custom colors to the game
         public static void AddCustomColor(Color32 main, Color32 shadow, StringNames name) {
             var maincolor = PL.PlayerColors.ToList();
@@ -55,15 +64,7 @@ namespace EpicColors
 
         // Get color's name from string
         public static string RealColorName(this string data) {
-            var name = "";
-            if (!data.Contains("name;"))
-                    return name;
-
-            foreach (var colordata in data.Split(" ")) {
-                name = colordata.StartsWith("name;") 
-                ? colordata.Replace("name;","").Replace("_", " ") : name;
-            }
-            return name;
+            return data.Replace("_", " ");
         }
 
         // This will convert the name to capitals during scan
@@ -105,13 +106,6 @@ namespace EpicColors
 
             return
                 new Color32(rgb[0], rgb[1], rgb[2], 255);
-        }
-
-        // Option for color creator to turn off built in color
-        public static bool includeBuiltinColor() {
-            var custom = string.Join(" ", TxtContentList);
-            return
-                custom.Contains("removeBuiltIn;") ? false : true;
         }
 
         // Check if the string is convertable to byte or not

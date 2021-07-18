@@ -1,50 +1,71 @@
 using System.Collections.Generic;
 using System.Linq;
-using HarmonyLib;
-using UnhollowerBaseLib;
 using System.IO;
-using System;
 using UnityEngine;
 
-using TC = TranslationController;
-using S = StringNames;
-using PL = Palette;
+using EpicColors.Patches.ColorTypes;
 
 namespace EpicColors
 {
     public static class CustomColorHandler {
-        public static readonly int OldPaletteCount = Palette.PlayerColors.Length;
-        public static List<string> AllCCList = new List<string>();
-        public static List<string> TxtContentList = new List<string>();
-        public static List<string> CustomColorList = new List<string>();
-        public static List<string> SpecialColorList = new List<string>();
-
-        public static List<(Color32 main, Color32 shadow, StringNames name)> 
-        OldCCList = new List<(Color32 main, Color32 shadow, StringNames name)>();
+        public static List<BaseColor> AllColors = new();
+        public static string Author = "";
 
         public static void CustomColor() {
             var ccPath = Path.Combine(Directory.GetCurrentDirectory(), "CustomColors.txt");
+            List<string> txtContentList = new();
 
             // Read CustomColors.txt contents and add to list
-            if (File.Exists(ccPath))
-                foreach (var datalist in File.ReadLines(ccPath))
-                    TxtContentList.Add(datalist);
-            
-            // Filter TxtContentList with "name;" to prevent wrong calculation when using "Count()"
-            var allcc = TxtContentList.ToList();
-            allcc.RemoveAll(x => !x.Contains("name;"));
-            CustomColorList = allcc;
+            if (File.Exists(ccPath)) foreach (var datalist in File.ReadLines(ccPath)) txtContentList.Add(datalist);
+            else
+			{
+				string defaultLines = ConfigBuilder.BuildDefaultConfig();
+                txtContentList = defaultLines.Split('\n').ToList();
+            }
 
-            // Append all color list into one
-            AllCCList = EpicColors.builtInColor.ToList();
-            foreach (string s in CustomColorList)
-                AllCCList.Add(s);
-            foreach (string s in SpecialColorList)
-                AllCCList.Add(s);
+            foreach (string content in txtContentList)
+            {
+                int index = content.IndexOf("author;");
+                if (index == -1) continue;
+                Author = content[(index + 7)..];
+            }
+
+            // Adds all colors to a list of BaseColors
+            int idTracker = 0;
+
+            foreach (string colorLine in txtContentList) if (colorLine.Contains("name;")) AllColors.Add(StringToObject(colorLine, idTracker++));
 
             // Get old colors into a list
             //for (int i = 0; i < Palette.PlayerColors.Length; i++)
-                //OldCCList[i] = (Palette.PlayerColors[i], Palette.ShadowColors[i], Palette.ColorNames[i]);
+            //OldCCList[i] = (Palette.PlayerColors[i], Palette.ShadowColors[i], Palette.ColorNames[i]);
+        }
+
+        private static BaseColor StringToObject(string colorLine, int id)
+        {
+            string[] colorData = colorLine.Split(' ');
+            foreach (string colorFieldString in colorData)
+            {
+                string[] colorField = colorFieldString.Split(';');
+                if (colorField.Length != 2 || colorField[0] != "special") continue;
+                switch (colorField[1])
+                {
+                    case "hue":
+                    {
+                        Hue colorAnim = new() { Id = id };
+                        colorAnim.Initialize(colorLine);
+                        return colorAnim;
+                    }
+                    case "refresh":
+                    {
+                        Refresh colorAnim = new() { Id = id };
+                        colorAnim.Initialize(colorLine);
+                        return colorAnim;
+                    }
+                }
+            }
+            Static color = new();
+            color.Initialize(colorLine);
+            return color;
         }
     }
 }

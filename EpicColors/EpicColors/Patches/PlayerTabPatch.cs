@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using EpicColors.Patches.ColorTypes;
 using HarmonyLib;
 using UnityEngine;
 
@@ -109,10 +111,8 @@ namespace EpicColors {
 			int id = PlayerControl.LocalPlayer.Data.ColorId;
 			__instance.HatImage.SetColor(id);
 
-            if (!ConverterHelper.includeBuiltinColor()) return;
-                for (int i = 0; i < AnimatedColours.ColoursList.Count; i++) 
-                    __instance.ColorChips[AnimatedColours.ColoursList[i].id].gameObject.GetComponent<SpriteRenderer>().color 
-                        = Palette.PlayerColors[AnimatedColours.ColoursList[i].id];
+			List<BaseColor> colorList = CustomColorHandler.AllColors;
+            for (int i = 0; i < colorList.Count; i++) __instance.ColorChips[colorList[i].Id].gameObject.GetComponent<SpriteRenderer>().color = PL.PlayerColors[colorList[i].Id];
 		}
 	}
 }

@@ -13,21 +13,8 @@ namespace EpicColors
     [HarmonyPriority(Priority.Last)]
     [HarmonyPatch]
     public static class Watermark {
-
-        public static string ToAuthor(this int colorId) {
-            foreach (var author in TxtContentList)
-                if (author.StartsWith("author;")) {
-                    var finalauthor = author.Replace("author;","");
-                    return colorId > (includeBuiltinColor() ? EpicColors.builtInColor.Count() - 1 : -1) ? 
-                        finalauthor : 
-                        "";
-                }
-            return "";
-        }
-
         public static string GetColorName(this int colorId) {
-            var name = includeBuiltinColor() ? AllCCList[colorId-OldPaletteCount].RealColorName() 
-            : CustomColorList[colorId-OldPaletteCount].RealColorName();
+            var name = AllColors[colorId].Name;
             var color = Palette.PlayerColors[colorId].ToHexString();
 
             return $"<color=#{color}>{name}</color>";
@@ -49,8 +36,8 @@ namespace EpicColors
 
                 if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) {
                     t.text += "\nEpicColors by Devs-Us\n";
-                    t.text += id > OldPaletteCount ? $"You are using {id.GetColorName()}\n" : "";
-                    t.text += id.ToAuthor();
+                    t.text += $"You are using {id.GetColorName()}\n";
+                    t.text += Author;
                 }
             }
         }
