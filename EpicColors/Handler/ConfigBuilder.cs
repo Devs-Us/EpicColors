@@ -9,7 +9,7 @@ namespace EpicColors
 		public static string BuildDefaultConfig()
 		{
 			StringBuilder stringSettings = new();
-			_ = stringSettings.AppendLine("removeBuiltIn;");
+			_ = stringSettings.AppendLine("author;");
 			_ = stringSettings.AppendLine("");
 			foreach (string colorData in EpicColors.defaultConfig)
 			{
