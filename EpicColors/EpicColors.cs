@@ -2,12 +2,14 @@
 using BepInEx.IL2CPP;
 using HarmonyLib;
 using System;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using BepInEx.Logging;
-using UnityEngine;
 using UnhollowerRuntimeLib;
 
 using static EpicColors.Logger;
+using static EpicColors.CustomColorHandler;
+using static EpicColors.ConverterHelper;
 
 namespace EpicColors
 {
@@ -95,7 +97,8 @@ namespace EpicColors
             };
 
         public static void LoadColors() {
-            if (wasRun) return;
+            if (WasRun) return;
+            WasRun = true;
 
             ModManager.Instance.ShowModStamp();
             CustomColorHandler.CustomColor();

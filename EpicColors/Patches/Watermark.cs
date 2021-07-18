@@ -6,12 +6,10 @@ using UnityEngine;
 using static EpicColors.ConverterHelper;
 using static EpicColors.CustomColorHandler;
 
-using PL = Palette;
-
 namespace EpicColors
 {
-    [HarmonyPriority(Priority.Last)]
     [HarmonyPatch]
+    [HarmonyPriority(Priority.Last)]
     public static class Watermark {
         public static string GetColorName(this int colorId) {
             var name = AllColors[colorId].Name;
@@ -29,7 +27,7 @@ namespace EpicColors
                 var pos = __instance.transform.localPosition;
                 var id = PlayerControl.LocalPlayer ? PlayerControl.LocalPlayer.Data.ColorId : -1;
 
-                if (!t.text.Contains('\n')) {
+                if (!t.text.Contains("\n")) {
                     __instance.transform.localPosition = new Vector3(pos.x, 2.8f, pos.z);
                     t.alignment = TMPro.TextAlignmentOptions.TopGeoAligned;
                 }
@@ -40,6 +38,26 @@ namespace EpicColors
                     t.text += Author;
                 }
             }
+        }
+
+        public static string ToAuthor(this int colorId) {
+            var name = "";
+            foreach (var author in TxtContentList)
+                if (author.StartsWith("author;") && 
+                IsUsingCustomColor(colorId, out bool customColor) && customColor) {
+                    var finalAuthor = author.Replace("author;","");
+                    name += finalAuthor + "\n";
+                }
+            return name;
+        }
+
+        public static string GetColorName(this int colorId) {
+            var name = IncludeBuiltinColor() ? AllCCList[colorId-OldPaletteCount].RealColorName() 
+            : CustomColorList[colorId-OldPaletteCount].RealColorName();
+            var color = Palette.PlayerColors[colorId].ToHexString();
+
+            return IsUsingCustomColor(colorId+1, out _) 
+            ? $"You are using <color=#{color}>{name}</color>\n" : "";
         }
     }
 }

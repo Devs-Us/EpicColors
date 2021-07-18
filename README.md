@@ -1,7 +1,7 @@
 <h1 align="center">EpicColors</h1>
 <p align="center">Add custom colors into your Among Us game!</p>
 
-<p align="center"><img src="https://cdn.discordapp.com/attachments/845322356095320114/859341714161270804/unknown.png" alt="BetterColours" width="600" /></p>
+<p align="center"><img src="https://user-images.githubusercontent.com/82711525/126036715-381947aa-0853-44dc-8da5-5e3cc4122787.gif" alt="BetterColours" width="600" /></p>
 
 <h2 align="center">Which colors were added?</h2>
 
@@ -46,22 +46,22 @@ Here's the example with Red:124 Green:155 and Blue:10
       author;Colors provided by SideSxope
     
 - Remove colors that is shipped with EpicColors by using `removeBuiltIn;`
-
+#
 Here's an example of a full content of `CustomColors.txt` file
 
-    author;Daemon
-    removeBuiltIn;
-    
-    name;Teal main;0,128,128
-    name;Olive main;99,114,24
-    name;Maroon main;176,48,96
-    name;Gold main;218,165,32
-    name;Mint main;168,255,195
-    name;Lavender main;201,146,224
+    author;Innersloth (Glitched Colors)
 
-and here's the result
-<p align="left"><img src="https://user-images.githubusercontent.com/82711525/125889470-6a8567e0-afb5-464e-9470-9b94526fd958.png" alt="PlayerTab" width="400" /></p>
-<p align="left"><img src="https://user-images.githubusercontent.com/82711525/125899080-78a69ed1-c362-47d2-9d03-9fba1b74d542.png" width="400" /></p>
+    name;Fortegreen main;29,152,83
+    name;SunBurn main;241,247,63 shadow;241,42,47
+
+and TADAA! 
+<p align="left"><img src="https://user-images.githubusercontent.com/82711525/126036324-7363d5a9-6893-44b1-8df2-9f86dd746e9d.png" alt="PlayerTab" width="400" />
+<img src="https://user-images.githubusercontent.com/82711525/126036369-477859f2-c03a-41ed-b975-353577f45e2c.png" width="400" /></p>
+
+If you add the parameter `removeBuiltIn;`, the built in colors that is shipped with our mod will get excluded! Here's the preview:
+
+<p align="left"><img src="https://user-images.githubusercontent.com/82711525/126036454-915ef977-3be8-48b0-a279-2aca9e85ac04.png" alt="PlayerTab" width="400" />
+
 
 #
 <p align="center">This mod is not affiliated with Among Us or Innersloth LLC, and the content contained therein is not endorsed or otherwise sponsored by Innersloth LLC. Portions of the materials contained herein are property of Innersloth LLC.</p>

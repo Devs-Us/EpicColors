@@ -1,5 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <Version>1.0.1</Version>
     <TargetFramework>netstandard2.1</TargetFramework>
     <LangVersion>latest</LangVersion>
     <GamePlatform>Steam</GamePlatform>
@@ -8,17 +9,16 @@
 
     <RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>
 		<EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Reactor.MSBuild" Version="*" PrivateAssets="all" />
   </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="*Patches\mask" />
-  </ItemGroup>
   
-  <Target Name="Copy" AfterTargets="Build" Condition="'$(AmongUs)' != ''">
-    <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFolder="$(AmongUs)/BepInEx/plugins/" />
+  <Target Name="Copy" AfterTargets="Build">
+    <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFolder="$(AmongUs)/BepInEx/plugins/" Condition="'$(AmongUs)' != ''"/>
+    <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFiles="../Build/$(AssemblyName).dll" />
   </Target>
 </Project>

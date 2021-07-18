@@ -1,8 +1,6 @@
 using System;
 using UnityEngine;
-using System.Text.RegularExpressions;
 using System.Linq;
-using System.IO;
 using static EpicColors.CustomColorHandler;
 
 using PL = Palette;
@@ -36,30 +34,30 @@ namespace EpicColors
         }
 
         // Get main and shadow value from string (format)
-        public static Tuple<Color32, Color32, bool> ToColorMainShadow(this string data) {
+        public static Tuple<Color32, Color32> ToColorMainShadow(this string value) {
             var empty = new Color32();
             var main = empty;
             var shadow = empty;
 
-            if (!data.Contains("main;"))
-                return Tuple.Create(empty, empty, false);
+            if (!value.Contains("main;"))
+                return Tuple.Create(empty, empty);
 
-            foreach (var colordata in data.Split(" ")) {
+            foreach (var data in value.Split(" ")) {
                 var s = "shadow;";
 
-                if (colordata.StartsWith("main;"))
-                    main = colordata.StringToColor32();
+                if (data.StartsWith("main;"))
+                    main = data.StringToColor32();
 
-                if (colordata.StartsWith(s))
-                    shadow = colordata.StringToColor32();
-                else if (!data.Contains(s))
+                if (data.StartsWith(s))
+                    shadow = data.StringToColor32();
+                else if (!value.Contains(s))
                     shadow = Color32.Lerp(main, Color.black, .4f);
 
                 ColorsPlugin.Logger.LogDebug(main.ToString() + shadow.ToString());
             }
 
             return 
-                Tuple.Create(main, shadow, true);
+                Tuple.Create(main, shadow);
         }
 
         // Get color's name from string
@@ -68,16 +66,16 @@ namespace EpicColors
         }
 
         // This will convert the name to capitals during scan
-        public static Tuple<string, bool> ToColorName(this string data) {
+        public static string ToColorName(this string value) {
             var name = "";
-            if (!data.Contains("name;"))
-                    return Tuple.Create("", false);
+            if (!value.Contains("name;"))
+                    return "";
 
-            foreach (var colordata in data.Split(" ")) {
-                name = colordata.StartsWith("name;") 
-                ? colordata.ToUpper().Replace("NAME;","").Replace("_", "") : name;
+            foreach (var data in value.Split(" ")) {
+                name = data.StartsWith("name;") 
+                ? data.ToUpper().Replace("NAME;","").Replace("_", "") : name;
             }
-            return Tuple.Create(name, true);
+            return name;
         }
 
         // Convert from string (with format) to Color32
@@ -85,20 +83,20 @@ namespace EpicColors
 
             // Input need to be "byte,byte,byte"
             string[] excludedword = {"shadow;","main;","name;"};
-            var finalstring = color;
+            var finalString = color;
 
             foreach (string excluded in excludedword)
                 if (color.Contains(excluded))
-                    finalstring = finalstring.Replace(excluded, "");
+                    finalString = finalString.Replace(excluded, "");
 
             // Check if the string only contains 0 - 255 (byte)
-            if (!finalstring.Split(',').IsByteOnly()) {
-                finalstring = "1,1,1";
+            if (!finalString.Split(',').IsByteOnly()) {
+                finalString = "1,1,1";
                 ColorsPlugin.Logger.LogError($"There's an error while loading the color from strings. STRINGS_NOT_BYTE");
             }
             
             // Change to byte
-            var rgb = Array.ConvertAll(finalstring
+            var rgb = Array.ConvertAll(finalString
                 .Split(',')
                 .Select(c => c)
                 .ToArray(), 
