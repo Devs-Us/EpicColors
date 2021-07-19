@@ -21,14 +21,10 @@ namespace EpicColors.Patches.Animated
 
         public void Update()
         {
-            try
-            {
-                if (!PlayerRender) return;
-                int paletteCount = (RemoveVanillaColors(out var oldColor) ? 0 : oldColor);
-                PlayerRender.material.SetColor("_BodyColor", Palette.PlayerColors[ColorId + paletteCount]);
-                PlayerRender.material.SetColor("_BackColor", Palette.ShadowColors[ColorId + paletteCount]);
-            }
-            catch { }
+            int paletteCount = (RemoveVanillaColors(out var oldColor) ? 0 : oldColor);
+            if (!PlayerRender) return;
+            PlayerRender.material.SetColor("_BodyColor", Palette.PlayerColors[ColorId + paletteCount]);
+            PlayerRender.material.SetColor("_BackColor", Palette.ShadowColors[ColorId + paletteCount]);
         }
     }
 }
