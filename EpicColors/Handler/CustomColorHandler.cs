@@ -75,20 +75,5 @@ namespace EpicColors
             return txtContentList.Contains("RemoveVanillaColors;") 
                 ? true : false;
         }
-
-        // Check if the string is convertable to byte or not
-        public static bool IsByteOnly(this string[] value) {
-            foreach (string val in value)
-                try {
-                    byte.Parse(val); 
-                    return true;
-                }
-                catch (System.Exception e) {
-                    Logger.ErrorLogger("converting string to byte", e);
-                }
-
-            return false;
-        }
-
     }
 }

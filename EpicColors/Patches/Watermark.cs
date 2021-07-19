@@ -12,6 +12,7 @@ namespace EpicColors
             var name = AllColors[colorId].Name;
             var color = Palette.PlayerColors[PlayerControl.LocalPlayer.Data.ColorId].ToHexString();
 
+            if (name is null || color is null) return "";
             return $"You are using <color=#{color}>{name}</color>\n";
         }
 
@@ -32,10 +33,9 @@ namespace EpicColors
                 if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) {
                     Debug.logger.Log(Author);
                     t.text += "\nEpicColors by Devs-Us <size=80%>v1.0.0</size>\n";
-                    try {
-                        t.text += id.GetColorName();
+                    t.text += id.GetColorName();
+                    if (Author != null)
                         t.text += !RemoveVanillaColors(out _) ? (id >= OldMain.Count ? Author : "") : Author;
-                    } catch {}
                 }
             }
         }

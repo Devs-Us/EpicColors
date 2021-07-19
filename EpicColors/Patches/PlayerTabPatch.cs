@@ -96,7 +96,7 @@ namespace EpicColors {
                 scroll.YBounds = new FloatRange(0f, y);
             }   
             catch (Exception e) {
-                ColorsPlugin.Logger.LogError(e);
+                Logger.ErrorLogger("patching PlayerTab", e);
             }
         }
 

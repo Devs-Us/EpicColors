@@ -24,8 +24,9 @@ namespace EpicColors.Patches.Animated
             try
             {
                 if (!PlayerRender) return;
-                PlayerRender.material.SetColor("_BodyColor", Palette.PlayerColors[ColorId + (RemoveVanillaColors(out var oldColor) ? 0 : oldColor)]);
-                PlayerRender.material.SetColor("_BackColor", Palette.ShadowColors[ColorId + (RemoveVanillaColors(out var _) ? 0 : oldColor)]);
+                int paletteCount = (RemoveVanillaColors(out var oldColor) ? 0 : oldColor);
+                PlayerRender.material.SetColor("_BodyColor", Palette.PlayerColors[ColorId + paletteCount]);
+                PlayerRender.material.SetColor("_BackColor", Palette.ShadowColors[ColorId + paletteCount]);
             }
             catch { }
         }
