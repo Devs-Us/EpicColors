@@ -2,21 +2,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using UnityEngine;
+using static Palette;
 
 using EpicColors.Patches.ColorTypes;
 
 namespace EpicColors
 {
     public static class CustomColorHandler {
+        public static List<Color32> OldMain = PlayerColors.ToList();
+        public static List<Color32> OldShadow = ShadowColors.ToList();
+        public static List<StringNames> OldNames = ColorNames.ToList();
         public static List<BaseColor> AllColors = new();
+        private static List<string> txtContentList = new();
         public static string Author = "";
 
         public static void CustomColor() {
             var ccPath = Path.Combine(Directory.GetCurrentDirectory(), "CustomColors.txt");
-            List<string> txtContentList = new();
 
             // Read CustomColors.txt contents and add to list
-            if (File.Exists(ccPath)) foreach (var datalist in File.ReadLines(ccPath)) txtContentList.Add(datalist);
+            if (File.Exists(ccPath)) 
+                foreach (var datalist in File.ReadLines(ccPath)) 
+                    txtContentList.Add(datalist);
             else
 			{
 				string defaultLines = ConfigBuilder.BuildDefaultConfig();
@@ -30,14 +36,10 @@ namespace EpicColors
                 Author = content[(index + 7)..];
             }
 
-            // Adds all colors to a list of BaseColors
             int idTracker = 0;
-
-            foreach (string colorLine in txtContentList) if (colorLine.Contains("name;")) AllColors.Add(StringToObject(colorLine, idTracker++));
-
-            // Get old colors into a list
-            //for (int i = 0; i < Palette.PlayerColors.Length; i++)
-            //OldCCList[i] = (Palette.PlayerColors[i], Palette.ShadowColors[i], Palette.ColorNames[i]);
+            foreach (string colorLine in txtContentList)
+                if (colorLine.Contains("name;")) 
+                    AllColors.Add(StringToObject(colorLine, idTracker++));
         }
 
         private static BaseColor StringToObject(string colorLine, int id)
@@ -68,19 +70,10 @@ namespace EpicColors
             return color;
         }
 
-        // Check if the string is convertable to byte or not
-        public static bool IsByteOnly(this string[] value) {
-            foreach (string val in value)
-                try {
-                    byte.Parse(val); 
-                    return true;
-                }
-                catch (System.Exception e) {
-                    Logger.ErrorLogger("converting string to byte", e);
-                }
-
-            return false;
+        public static bool RemoveVanillaColors(out int oldColor) {
+            oldColor = OldMain.Count;
+            return txtContentList.Contains("RemoveVanillaColors;") 
+                ? true : false;
         }
-
     }
 }

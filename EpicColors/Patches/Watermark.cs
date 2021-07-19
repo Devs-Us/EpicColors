@@ -8,10 +8,12 @@ namespace EpicColors
     [HarmonyPriority(Priority.Last)]
     public static class Watermark {
         public static string GetColorName(this int colorId) {
+            colorId -= RemoveVanillaColors(out var oldColor) ? 0 : oldColor;
             var name = AllColors[colorId].Name;
-            var color = Palette.PlayerColors[colorId].ToHexString();
+            var color = Palette.PlayerColors[PlayerControl.LocalPlayer.Data.ColorId].ToHexString();
 
-            return $"<color=#{color}>{name}</color>";
+            if (name is null || color is null) return "";
+            return $"You are using <color=#{color}>{name}</color>\n";
         }
 
         [HarmonyPatch(typeof(PingTracker), nameof(PingTracker.Update))]
@@ -31,8 +33,9 @@ namespace EpicColors
                 if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) {
                     Debug.logger.Log(Author);
                     t.text += "\nEpicColors by Devs-Us <size=80%>v1.0.0</size>\n";
-                    t.text += $"You are using {id.GetColorName()}\n";
-                    t.text += Author;
+                    t.text += id.GetColorName();
+                    if (Author != null)
+                        t.text += !RemoveVanillaColors(out _) ? (id >= OldMain.Count ? Author : "") : Author;
                 }
             }
         }
