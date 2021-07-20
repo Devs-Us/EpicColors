@@ -1,6 +1,10 @@
 <h1 align="center">EpicColors</h1>
 <p align="center">Add custom colors into your Among Us game!</p>
 
+<p align="center">Discord: https://discord.gg/cHDxA93fGc <br/>
+Youtube: https://www.youtube.com/channel/UCy4h9UsVcoQV_QU5ew_NeiQ/ <br/>
+GitHub: https://github.com/Devs-Us</p>
+
 <p align="center"><img src="https://user-images.githubusercontent.com/82711525/126036715-381947aa-0853-44dc-8da5-5e3cc4122787.gif" alt="BetterColours" width="600" /></p>
 
 <h2 align="center">Which colors were added?</h2>
@@ -23,7 +27,7 @@
 
 <h2 align="center">Adding your own color (Beta)</h2>
 
-EpicColors allows you to configure additional color to the game as simple as creating a txt file!\
+EpicColors allows you to configure additional colors to the game as simple as creating a txt file!\
 To get started, make sure you have `CustomColors.txt` file inside your Among Us game directory
 
 #
