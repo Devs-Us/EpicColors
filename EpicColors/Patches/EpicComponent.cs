@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using EpicColors.Patches.ColorTypes;
 using HarmonyLib;
-using static EpicColors.CustomColorHandler;
-
-using EpicColors.Patches.ColorTypes;
+using System;
+using System.Collections.Generic;
 using UnhollowerRuntimeLib;
+using UnityEngine;
+using static EpicColors.CustomColorHandler;
 
 namespace EpicColors.Handler
 {
@@ -29,7 +28,7 @@ namespace EpicColors.Handler
                 Logger.ErrorLogger("registering type", e);
             }
         }
-	}
+    }
 
     public class EpicColors : MonoBehaviour
     {
@@ -41,7 +40,7 @@ namespace EpicColors.Handler
             for (int i = 0; i < colorList.Count; i++)
             {
                 if (!colorList[i].IsSpecial) continue;
-		    	Type type = colorList.GetType();
+                _ = colorList.GetType();
                 colorList[i].Timer = ((Time.deltaTime / colorList[i].Duration) + colorList[i].Timer) % 1f;
                 Palette.PlayerColors[i + OldMainCount] = colorList[i].GetBodyColor();
                 Palette.ShadowColors[i + OldMainCount] = colorList[i].GetShadowColor();

@@ -1,15 +1,11 @@
 ﻿using BepInEx;
 using BepInEx.IL2CPP;
+using BepInEx.Logging;
 using HarmonyLib;
 using System;
-using UnityEngine;
 using UnityEngine.SceneManagement;
-using BepInEx.Logging;
-using UnhollowerRuntimeLib;
-
-using static EpicColors.Logger;
-using static EpicColors.CustomColorHandler;
 using static EpicColors.ConverterHelper;
+using static EpicColors.CustomColorHandler;
 
 namespace EpicColors
 {
@@ -29,14 +25,15 @@ namespace EpicColors
 
             // Because some mods overwrite PL.PlayerColors if
             // it is loaded after EpicColors
-            SceneManager.add_sceneLoaded((System.Action<Scene, LoadSceneMode>)((_, __) => 
+            SceneManager.add_sceneLoaded((Action<Scene, LoadSceneMode>)((_, __) =>
             EpicColors.LoadColors()));
 
             Harmony.PatchAll();
         }
     }
 
-    public class EpicColors {
+    public class EpicColors
+    {
 
         // Somehow it got called triple times O_O
         private static bool WasRun = false;
@@ -75,18 +72,19 @@ namespace EpicColors
             ""
             };
 
-        public static void LoadColors() {
+        public static void LoadColors()
+        {
             if (WasRun) return;
             WasRun = true;
 
             ModManager.Instance.ShowModStamp();
-            CustomColorHandler.CustomColor();
+            CustomColor();
 
             if (RemoveVanillaColors)
-                ConverterHelper.ClearPalette();
-            
+                ClearPalette();
+
             foreach (var data in CustomColorHandler.AllColors)
-                ConverterHelper.AddCustomColor(data.GetBodyColor(), data.GetShadowColor(), 
+                AddCustomColor(data.GetBodyColor(), data.GetShadowColor(),
                     data.Name.ToUpper().NewStringNames());
         }
     }

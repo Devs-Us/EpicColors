@@ -1,28 +1,32 @@
-using System;
 using HarmonyLib;
+using System;
 using UnityEngine;
-
-using P=PlayerTab;
 using static Palette;
+using P = PlayerTab;
 
-namespace EpicColors {
+namespace EpicColors
+{
 
     [HarmonyPatch]
-    internal static class PlayerTabPatch {
+    internal static class PlayerTabPatch
+    {
         private static GameObject Inner = null;
         private static Scroller scroll = null;
 
         [HarmonyPatch(typeof(P), nameof(P.OnEnable))]
         [HarmonyPostfix]
-        public static void OnEnablePatch(P __instance) {
+        public static void OnEnablePatch(P __instance)
+        {
             var p = __instance;
-            
-            try {
+
+            try
+            {
                 foreach (var colorChip in p.ColorChips)
                     GameObject.Destroy(colorChip.gameObject);
                 p.ColorChips.Clear();
 
-                if (Inner == null || !Inner.scene.IsValid()) {
+                if (Inner == null || !Inner.scene.IsValid())
+                {
                     Inner = new GameObject { layer = 5, name = "Inner" };
                     var scroller = new GameObject { layer = 5, name = "Scroller" };
                     scroll = scroller.AddComponent<Scroller>();
@@ -55,7 +59,8 @@ namespace EpicColors {
                     mask.SetActive(true);
                 }
 
-                for (var i = 0; i < PlayerColors.Length; i++) {
+                for (var i = 0; i < PlayerColors.Length; i++)
+                {
                     var xOffset = -0.935f + (i % 5 * 0.47f);
                     var yOffset = 1.55f - (i / 5 * 0.47f);
 
@@ -94,8 +99,9 @@ namespace EpicColors {
                 var row = Mathf.Max((p.ColorChips.Count / 5) - 7.4f, 0);
                 var y = (row * 0.55f) + 0.25f;
                 scroll.YBounds = new FloatRange(0f, y);
-            }   
-            catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 Logger.ErrorLogger("patching PlayerTab", e);
             }
         }
@@ -103,13 +109,13 @@ namespace EpicColors {
         [HarmonyPatch(typeof(P), nameof(P.Update))]
         [HarmonyPostfix]
         public static void UpdatePatch(P __instance)
-		{
-			int id = PlayerControl.LocalPlayer.Data.ColorId;
-			__instance.HatImage.SetColor(id);
+        {
+            int id = PlayerControl.LocalPlayer.Data.ColorId;
+            __instance.HatImage.SetColor(id);
 
             for (int i = 0; i < PlayerColors.Length; i++)
-                __instance.ColorChips[i].gameObject.GetComponent<SpriteRenderer>().color 
+                __instance.ColorChips[i].gameObject.GetComponent<SpriteRenderer>().color
                     = PlayerColors[i];
-		}
+        }
     }
 }
