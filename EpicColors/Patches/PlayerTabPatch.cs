@@ -3,7 +3,7 @@ using HarmonyLib;
 using UnityEngine;
 
 using P=PlayerTab;
-using PL=Palette;
+using static Palette;
 
 namespace EpicColors {
 
@@ -55,7 +55,7 @@ namespace EpicColors {
                     mask.SetActive(true);
                 }
 
-                for (var i = 0; i < PL.PlayerColors.Length; i++) {
+                for (var i = 0; i < PlayerColors.Length; i++) {
                     var xOffset = -0.935f + (i % 5 * 0.47f);
                     var yOffset = 1.55f - (i / 5 * 0.47f);
 
@@ -87,11 +87,11 @@ namespace EpicColors {
                         p.SelectColor(j);
                     });
 
-                    cc.Inner.color = PL.PlayerColors[i];
+                    cc.Inner.color = PlayerColors[i];
                     p.ColorChips.Add(cc);
                 }
 
-                var row = Mathf.Max((__instance.ColorChips.Count / 5) - 7.4f, 0);
+                var row = Mathf.Max((p.ColorChips.Count / 5) - 7.4f, 0);
                 var y = (row * 0.55f) + 0.25f;
                 scroll.YBounds = new FloatRange(0f, y);
             }   
@@ -102,14 +102,14 @@ namespace EpicColors {
 
         [HarmonyPatch(typeof(P), nameof(P.Update))]
         [HarmonyPostfix]
-        public static void UpdatePatch(PlayerTab __instance)
+        public static void UpdatePatch(P __instance)
 		{
 			int id = PlayerControl.LocalPlayer.Data.ColorId;
 			__instance.HatImage.SetColor(id);
 
-            for (int i = 0; i < Palette.PlayerColors.Length; i++)
+            for (int i = 0; i < PlayerColors.Length; i++)
                 __instance.ColorChips[i].gameObject.GetComponent<SpriteRenderer>().color 
-                    = PL.PlayerColors[i];
+                    = PlayerColors[i];
 		}
     }
 }

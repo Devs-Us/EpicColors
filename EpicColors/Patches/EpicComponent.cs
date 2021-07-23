@@ -37,7 +37,7 @@ namespace EpicColors.Handler
 
         public void Update()
         {
-            List<BaseColor> colorList = CustomColorHandler.AllColors;
+            List<BaseColor> colorList = AllColors;
             for (int i = 0; i < colorList.Count; i++)
             {
                 if (!colorList[i].IsSpecial) continue;

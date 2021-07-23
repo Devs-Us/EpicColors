@@ -10,7 +10,7 @@ namespace EpicColors {
     public static class SpriteMaskHandler {
         public static Sprite SpriteMask(Assembly assembly = null) {
             try {
-                var imageBytes = Convert.FromBase64String(ok);
+                var imageBytes = Convert.FromBase64String(mask);
                 Texture2D tex = new Texture2D(2, 2);
                 tex.LoadImage(imageBytes, true);
                 return Sprite.Create(tex, new Rect(0.0f, 0.0f, tex.width, tex.height), new Vector2(0.5f, 0.5f), 100.0f);
@@ -32,7 +32,7 @@ namespace EpicColors {
         internal delegate bool d_LoadImage(IntPtr tex, IntPtr data, bool markNonReadable);
         internal static d_LoadImage ICall_LoadImage;
 
-        internal static string ok = 
+        internal static string mask = 
         @"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAMSURBVBhXY/j//z8ABf4C/qc1gYQAAAAASUVORK5CYII=";
     }
 }
