@@ -87,7 +87,7 @@ namespace EpicColors
             
             foreach (var data in CustomColorHandler.AllColors)
                 ConverterHelper.AddCustomColor(data.GetBodyColor(), data.GetShadowColor(), 
-                    data.Name.NewStringNames());
+                    data.Name.ToUpper().NewStringNames());
         }
     }
 }

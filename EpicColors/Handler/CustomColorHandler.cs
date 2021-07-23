@@ -10,7 +10,7 @@ namespace EpicColors
 {
     public static class CustomColorHandler {
         public static int OldMainCount => RemoveVanillaColors ? 0 : OldMain.Count;
-        public static bool RemoveVanillaColors => txtContentList.Contains("RemoveVanillaColors;") ? true : false;
+        public static bool RemoveVanillaColors => txtContentList.Contains("RemoveVanillaColors;");
         public static List<Color32> OldMain = PlayerColors.ToList();
         public static List<Color32> OldShadow = ShadowColors.ToList();
         public static List<StringNames> OldNames = ColorNames.ToList();

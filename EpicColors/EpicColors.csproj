@@ -20,6 +20,5 @@
   
   <Target Name="Copy" AfterTargets="Build">
     <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFolder="$(AmongUs)/BepInEx/plugins/" Condition="'$(AmongUs)' != ''" />
-    <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFiles="../Build/$(AssemblyName).dll" />
   </Target>
 </Project>
