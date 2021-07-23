@@ -72,6 +72,7 @@ namespace EpicColors
             // Special colors
             "name;Rainbow special;hue duration;5 main;100,100 shadow;100,65",
             "name;Seasonal special;refresh duration;6 main;255,0,0>255,255,0>0,255,0>0,255,255>0,0,255>255,0,255 shadow;166,0,0>166,166,0>0,166,0>0,166,166>0,0,166>166,0,166",
+            ""
             };
 
         public static void LoadColors() {
@@ -81,8 +82,9 @@ namespace EpicColors
             ModManager.Instance.ShowModStamp();
             CustomColorHandler.CustomColor();
 
-            if (RemoveVanillaColors(out _))
+            if (RemoveVanillaColors)
                 ConverterHelper.ClearPalette();
+            
             foreach (var data in CustomColorHandler.AllColors)
                 ConverterHelper.AddCustomColor(data.GetBodyColor(), data.GetShadowColor(), 
                     data.Name.NewStringNames());

@@ -108,7 +108,8 @@ namespace EpicColors {
 			__instance.HatImage.SetColor(id);
 
             for (int i = 0; i < Palette.PlayerColors.Length; i++)
-                __instance.ColorChips[i].gameObject.GetComponent<SpriteRenderer>().color = PL.PlayerColors[i];
+                __instance.ColorChips[i].gameObject.GetComponent<SpriteRenderer>().color 
+                    = PL.PlayerColors[i];
 		}
     }
 }

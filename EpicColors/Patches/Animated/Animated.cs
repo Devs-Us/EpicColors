@@ -15,7 +15,7 @@ namespace EpicColors.Patches.Animated
         {
             public static bool Prefix([HarmonyArgument(0)] int colorId, [HarmonyArgument(1)] Renderer rend)
             {
-                colorId -= RemoveVanillaColors(out var oldColor) ? 0 : oldColor;
+                colorId -= OldMainCount;
                 AnimatedColors colorComponent = rend.gameObject.GetComponent<AnimatedColors>();
                 if (colorComponent != null && colorComponent.ColorId != colorId) 
                     UnityEngine.Object.Destroy(colorComponent);

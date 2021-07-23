@@ -1,5 +1,6 @@
 using HarmonyLib;
 using UnityEngine;
+using System.Linq;
 using static EpicColors.CustomColorHandler;
 
 namespace EpicColors
@@ -8,22 +9,23 @@ namespace EpicColors
     [HarmonyPriority(Priority.Last)]
     public static class Watermark {
         public static string GetColorName(this int colorId) {
-            colorId -= RemoveVanillaColors(out var oldColor) ? 0 : oldColor;
-            var name = AllColors[colorId].Name;
-            var color = Palette.PlayerColors[PlayerControl.LocalPlayer.Data.ColorId].ToHexString();
+            var IdList = colorId - OldMainCount;
 
-            if (name is null || color is null) return "";
-            return $"You are using <color=#{color}>{name}</color>\n";
+            var name = AllColors.ElementAtOrDefault(IdList) != null? 
+            AllColors[IdList].Name : "";
+            var color = Palette.PlayerColors[colorId].ToHexString();
+
+            return name != ""? $"You are using <color=#{color}>{name}</color>": "";
         }
 
         [HarmonyPatch(typeof(PingTracker), nameof(PingTracker.Update))]
         private static class PingTrackerPatch
         {
-            static void Postfix(PingTracker __instance) {
-               
+            [HarmonyPostfix]
+            static void WatermarkPatch(PingTracker __instance) {
                 var t = __instance.text;
                 var pos = __instance.transform.localPosition;
-                var id = PlayerControl.LocalPlayer ? PlayerControl.LocalPlayer.Data.ColorId : -1;
+                var id = PlayerControl.LocalPlayer?.Data.ColorId;
 
                 if (!t.text.Contains("\n")) {
                     __instance.transform.localPosition = new Vector3(pos.x, 2.8f, pos.z);
@@ -31,11 +33,9 @@ namespace EpicColors
                 }
 
                 if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) {
-                    Debug.logger.Log(Author);
-                    t.text += "\nEpicColors by Devs-Us <size=80%>v1.0.0</size>\n";
-                    t.text += id.GetColorName();
-                    if (Author != null)
-                        t.text += !RemoveVanillaColors(out _) ? (id >= OldMain.Count ? Author : "") : Author;
+                    t.text += "\nEpicColors by Devs-Us <size=80%>v1.1</size>\n";
+                    t.text += id?.GetColorName();
+                    t.text += !RemoveVanillaColors ? (id >= OldMain.Count ? Author : "") : Author;
                 }
             }
         }

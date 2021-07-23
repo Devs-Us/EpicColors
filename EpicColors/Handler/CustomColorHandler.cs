@@ -9,10 +9,13 @@ using EpicColors.Patches.ColorTypes;
 namespace EpicColors
 {
     public static class CustomColorHandler {
+        public static int OldMainCount => RemoveVanillaColors ? 0 : OldMain.Count;
+        public static bool RemoveVanillaColors => txtContentList.Contains("RemoveVanillaColors;") ? true : false;
         public static List<Color32> OldMain = PlayerColors.ToList();
         public static List<Color32> OldShadow = ShadowColors.ToList();
         public static List<StringNames> OldNames = ColorNames.ToList();
         public static List<BaseColor> AllColors = new();
+        public static List<string> OldColors = new();
         private static List<string> txtContentList = new();
         public static string Author = "";
 
@@ -20,12 +23,14 @@ namespace EpicColors
             var ccPath = Path.Combine(Directory.GetCurrentDirectory(), "CustomColors.txt");
 
             // Read CustomColors.txt contents and add to list
-            if (File.Exists(ccPath)) 
+            if (File.Exists(ccPath)) {
+                ConfigBuilder.GetOldList(File.ReadLines(ccPath).ToArray());
                 foreach (var datalist in File.ReadLines(ccPath)) 
                     txtContentList.Add(datalist);
+            }
             else
 			{
-				string defaultLines = ConfigBuilder.BuildDefaultConfig();
+				string defaultLines = ConfigBuilder.BuildDefaultConfig(true);
                 txtContentList = defaultLines.Split('\n').ToList();
             }
 
@@ -33,7 +38,7 @@ namespace EpicColors
             {
                 int index = content.IndexOf("author;");
                 if (index == -1) continue;
-                Author = content[(index + 7)..];
+                Author += "\n" + content[(index + 7)..];
             }
 
             int idTracker = 0;
@@ -68,12 +73,6 @@ namespace EpicColors
             Static color = new();
             color.Initialize(colorLine);
             return color;
-        }
-
-        public static bool RemoveVanillaColors(out int oldColor) {
-            oldColor = OldMain.Count;
-            return txtContentList.Contains("RemoveVanillaColors;") 
-                ? true : false;
         }
     }
 }
