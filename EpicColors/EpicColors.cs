@@ -15,7 +15,7 @@ namespace EpicColors
     {
         static internal ManualLogSource Logger;
         public const string Id = "DevsUs.EpicColors";
-        public const string Version = "1.0.0";
+        public const string Version = "1.1.0";
 
         public Harmony Harmony { get; } = new Harmony(Id);
 
