@@ -1,91 +1,88 @@
-﻿using BepInEx;
+﻿using System;
+using System.Collections.Generic;
+using BepInEx;
 using BepInEx.IL2CPP;
 using BepInEx.Logging;
+using EpicColors.Extensions;
+using EpicColors.Handler;
+using EpicColors.Types.ColorTypes;
 using HarmonyLib;
-using System;
+using UnhollowerRuntimeLib;
+using UnityEngine;
 using UnityEngine.SceneManagement;
-using static EpicColors.ConverterHelper;
-using static EpicColors.CustomColorHandler;
 
 namespace EpicColors
 {
-    [BepInPlugin(Id, "EpicColors", Version)]
-    [BepInProcess("Among Us.exe")]
-    public class ColorsPlugin : BasePlugin
-    {
-        static internal ManualLogSource Logger;
-        public const string Id = "DevsUs.EpicColors";
-        public const string Version = "1.1.0";
+	[BepInPlugin(Id, "EpicColors", Version)]
+	[BepInProcess("Among Us.exe")]
+	public class EpicColors : BasePlugin
+	{
+		static internal ManualLogSource Logger;
+		public const String Id = "DevsUs.EpicColors";
+		public const String Version = "1.1.0";
 
-        public Harmony Harmony { get; } = new Harmony(Id);
+		public Harmony Harmony { get; } = new Harmony(Id);
 
-        public override void Load()
-        {
-            Logger = Log;
+		public override void Load()
+		{
+			Logger = Log;
+			Harmony.PatchAll();
+		}
+	}
 
-            // Because some mods overwrite PL.PlayerColors if
-            // it is loaded after EpicColors
-            SceneManager.add_sceneLoaded((Action<Scene, LoadSceneMode>)((_, __) =>
-            EpicColors.LoadColors()));
+	[HarmonyPatch]
+	public static class AmongUsAwake
+	{
+		static Boolean _patched = false;
 
-            Harmony.PatchAll();
-        }
-    }
+		[HarmonyPatch(typeof(AmongUsClient))]
+		[HarmonyPatch(nameof(AmongUsClient.Awake))]
+		[HarmonyPostfix]
+		public static void OnAwake()
+		{
+			if (_patched) return;
+			_patched = true;
 
-    public class EpicColors
-    {
+			ModManager.Instance.ShowModStamp();
+			ColorData.Load();
 
-        // Somehow it got called triple times O_O
-        private static bool WasRun = false;
-        public static string[] defaultConfig = {
-            // Static colors
-            "name;Acid_Green main;124,155,10",
-            "name;Aqua_Blue main;2,90,143",
-            "name;Blood_Red main;151,0,0",
-            "name;Chocolate main;89,52,0",
-            "name;Flame main;236,109,0",
-            "name;Crimson main;167,0,24",
-            "name;Gold main;218,156,32",
-            "name;Mint main;168,255,195",
-            "name;Lavender main;201,146,224",
-            "name;Midnight_Blue main;55,24,182",
-            "name;Jungle_Green main;43,78,39",
-            "name;Light_Pink main;236,178,170",
-            "name;Panda main;255,255,255 shadow;12,12,12",
-            "name;Mustard main;198,193,5",
-            "name;Blurple main;88,99,240",
-            "name;NavyBlue main;29,0,112",
-            "name;Teal main;0,128,128",
-            "name;Olive main;99,114,24",
-            "name;Peach main;255,229,180",
-            "name;Lapis_Lazuli main;38,97,156",
-            "name;Silver main;192,192,192",
-            "name;Cadmium_Yellow main;255,255,0",
-            "name;Brazilwood main;189,166,133",
-            "name;Mummybrown main;143,75,40",
-            "name;Quercitron main;229,176,61",
-            "name;Cochineal main;159,35,45",
-            "", 
-            // Special colors
-            "name;Rainbow special;hue duration;5 main;100,100 shadow;100,65",
-            "name;Seasonal special;refresh duration;6 main;255,0,0>255,255,0>0,255,0>0,255,255>0,0,255>255,0,255 shadow;166,0,0>166,166,0>0,166,0>0,166,166>0,0,166>166,0,166",
-            ""
-            };
+			if (ColorData.RemoveVanillaColors)
+				Helpers.ClearPalette();
 
-        public static void LoadColors()
-        {
-            if (WasRun) return;
-            WasRun = true;
+			ColorData.AllColors.ForEach(x => x.AddCustomColor());
 
-            ModManager.Instance.ShowModStamp();
-            CustomColor();
+			try
+			{
+				ClassInjector.RegisterTypeInIl2Cpp<Types.Animated.AnimatedColors>();
+				ClassInjector.RegisterTypeInIl2Cpp<EpicColorsComponent>();
+				GameObject epicColors = new("EpicColors");
+				UnityEngine.Object.DontDestroyOnLoad(epicColors);
+				_ = epicColors.AddComponent<EpicColorsComponent>();
+			}
 
-            if (RemoveVanillaColors)
-                ClearPalette();
+			catch (Exception e)
+			{
+				EpicColors.Logger.LogError("There's an error while trying to register type, this might causes EpicColors not to load properly.");
+				EpicColors.Logger.LogError(e.ToString());
+			}
+		}
+	}
 
-            foreach (var data in CustomColorHandler.AllColors)
-                AddCustomColor(data.GetBodyColor(), data.GetShadowColor(),
-                    data.Name.ToUpper().NewStringNames());
-        }
-    }
+	public class EpicColorsComponent : MonoBehaviour
+	{
+		public EpicColorsComponent(IntPtr ptr) : base(ptr) { }
+
+		public void Update()
+		{
+			List<BaseColor> colorList = ColorData.AllColors;
+			for (Int32 i = 0; i < colorList.Count; i++)
+			{
+				if (!colorList[i].IsSpecial) continue;
+				_ = colorList.GetType();
+				colorList[i].Timer = ((Time.deltaTime / colorList[i].Duration) + colorList[i].Timer) % 1f;
+				Palette.PlayerColors[i] = colorList[i].GetBodyColor();
+				Palette.ShadowColors[i] = colorList[i].GetShadowColor();
+			}
+		}
+	}
 }

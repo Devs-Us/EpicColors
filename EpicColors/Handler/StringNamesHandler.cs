@@ -1,30 +1,31 @@
-using HarmonyLib;
+using System;
 using System.Collections.Generic;
-using S = StringNames;
+using HarmonyLib;
+using SN = StringNames;
 
-namespace EpicColors
+namespace EpicColors.Handler
 {
-    [HarmonyPatch(typeof(LanguageUnit), nameof(LanguageUnit.GetString))]
-    public static class StringNamesHandler
-    {
-        private static Dictionary<int, string> Strings = new Dictionary<int, string>();
-        private static int Id = -9999;
-        public static StringNames NewStringNames(this string str)
-        {
-            Strings[Id] = str;
-            return (S)Id--;
-        }
+	[HarmonyPatch(typeof(LanguageUnit), nameof(LanguageUnit.GetString))]
+	public static class StringHelpers
+	{
+		private static readonly Dictionary<Int32, String> Strings = new();
+		private static Int32 Id = -9999;
+		public static SN NewStringNames(String str)
+		{
+			Strings[Id] = str;
+			return (SN)Id--;
+		}
 
-        [HarmonyPrefix]
-        public static bool PatchAll(ref string __result, [HarmonyArgument(0)] S name)
-        {
-            if ((int)name <= -9999)
-            {
-                string text = Strings[(int)name];
-                __result = text ?? default;
-                return false;
-            }
-            return true;
-        }
-    }
+		[HarmonyPrefix]
+		public static Boolean PatchAll(ref String __result, [HarmonyArgument(0)] SN name)
+		{
+			if ((Int32)name <= -9999)
+			{
+				String text = Strings[(Int32)name];
+				__result = text ?? default;
+				return false;
+			}
+			return true;
+		}
+	}
 }
